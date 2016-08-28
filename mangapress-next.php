@@ -31,3 +31,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
+$plugin_folder = plugin_basename(dirname(__FILE__));
+
+if (!defined('MP_VERSION'))
+    define('MP_VERSION', '0.0.1');
+
+if (!defined('MP_FOLDER'))
+    define('MP_FOLDER', $plugin_folder);
+
+if (!defined('MP_ABSPATH'))
+    define('MP_ABSPATH', plugin_dir_path(__FILE__));
+
+if (!defined('MP_URLPATH'))
+    define('MP_URLPATH', plugin_dir_url(__FILE__));
+
+if (!defined('MP_LANG'))
+    define('MP_LANG', $plugin_folder . '/languages');
+
+if (!defined('MP_DOMAIN'))
+    define('MP_DOMAIN', 'mangapress');
+
+require_once MP_ABSPATH . 'mangapress-options.php';
+require_once MP_ABSPATH . 'mangapress-install.php';
+
+$install = MangaPress_Install::get_instance();
+
+register_activation_hook(__FILE__, array($install, 'do_activate'));
+register_deactivation_hook(__FILE__, array($install, 'do_deactivate'));
