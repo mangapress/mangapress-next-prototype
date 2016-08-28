@@ -6,7 +6,7 @@
  */
 
 /**
- * Sample test case.
+ * Test fresh install of Manga+Press NEXT
  */
 class PluginActivationTest extends WP_UnitTestCase
 {

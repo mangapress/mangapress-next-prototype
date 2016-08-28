@@ -144,6 +144,8 @@ class MangaPress_Install
      */
     public function do_upgrade()
     {
+        do_action('mangapress_upgrade');
+
         update_option('mangapress_ver', MP_VERSION);
         delete_option( 'mangapress_upgrade' );
         flush_rewrite_rules(false);
