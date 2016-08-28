@@ -1,6 +1,6 @@
 <?php
 /**
- * Class SampleTest
+ * Class PluginActivationTest
  *
  * @package Mangapress_Next
  */
@@ -11,9 +11,11 @@
 class PluginActivationTest extends WP_UnitTestCase
 {
 
-    private $mangapressInstall;
 
-    private $user;
+    /**
+     * @var \MangaPress_Install
+     */
+    private $mangapressInstall;
 
 
     /**
@@ -23,6 +25,12 @@ class PluginActivationTest extends WP_UnitTestCase
     {
         $this->mangapressInstall = MangaPress_Install::get_instance();
         $this->mangapressInstall->do_activate();
+    }
+
+
+    public function tearDown()
+    {
+        $this->mangapressInstall->do_deactivate();
     }
 
 
