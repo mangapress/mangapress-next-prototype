@@ -63,6 +63,12 @@ class MangaPress_Posts
     const COMIC_ARCHIVE_DATEFORMAT = 'm.d.Y';
 
 
+    /**
+     * Post-type Slug. Defaults to comic.
+     */
+    const SLUG = 'comic';
+
+
     private static $instance = null;
 
     /**
@@ -71,13 +77,6 @@ class MangaPress_Posts
      * @var MangaPress_PostType
      */
     private $_post_type = null;
-
-
-    /**
-     * Post-type Slug. Defaults to comic.
-     * @var string
-     */
-    protected $slug = 'comic';
 
 
     public static function get_instance()
@@ -98,6 +97,9 @@ class MangaPress_Posts
     }
 
 
+    /**
+     * Register needed content-types
+     */
     private function register_content_types()
     {
         register_taxonomy(self::TAX_SERIES, array(self::POST_TYPE), array(
@@ -122,18 +124,12 @@ class MangaPress_Posts
             'register_meta_box_cb' => array($this, 'meta_box_cb'),
             'menu_icon' => null,
             'rewrite'   => array(
-                'slug' => $this->get_slug(),
+                'slug' => self::SLUG,
             ),
             'taxonomies' => array(
                 self::TAX_SERIES,
             ),
         ));
-    }
-
-
-    public function get_slug()
-    {
-        return $this->slug;
     }
 
 
