@@ -67,14 +67,15 @@ class MangaPress_Install
      */
     public function do_activate()
     {
-        self::$version = strval( get_option('mangapress_ver') );
+        self::$version = strval( get_option('mangapress_next_ver') );
 
         if (self::$version == '') {
-            add_option( 'mangapress_ver', MP_VERSION, '', 'no');
+            add_option( 'mangapress_next_ver', MP_VERSION, '', 'no');
             add_option( 'mangapress_options', serialize( MangaPress_Options::get_default_options() ), '', 'no' );
         }
 
-        if (version_compare(self::$version, MP_VERSION, '<') && !(self::$version == '')) {
+        if (version_compare(self::$version, MP_VERSION, '<')
+            && !(self::$version == '')) {
             add_option( 'mangapress_upgrade', 'yes', '', 'no');
         }
 
@@ -146,7 +147,7 @@ class MangaPress_Install
     {
         do_action('mangapress_upgrade');
 
-        update_option('mangapress_ver', MP_VERSION);
+        update_option('mangapress_next_ver', MP_VERSION);
         delete_option( 'mangapress_upgrade' );
         flush_rewrite_rules(false);
     }

@@ -37,4 +37,12 @@ class PluginUpgradeTest extends WP_UnitTestCase
         $this->mangapressInstall->do_deactivate();
     }
 
+
+    /**
+     * Test for existence (and value) of mangapress_upgrade
+     */
+    public function test_upgrade()
+    {
+        $this->assertEquals(get_option('mangapress_upgrade'), 'yes');
+    }
 }
