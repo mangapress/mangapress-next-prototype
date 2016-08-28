@@ -78,10 +78,13 @@ class MangaPress_Install
             add_option( 'mangapress_upgrade', 'yes', '', 'no');
         }
 
+        MangaPress_Bootstrap::get_instance()->init();
         $this->after_plugin_activation();
 
         flush_rewrite_rules(false);
     }
+
+
 
 
     /**
@@ -93,6 +96,33 @@ class MangaPress_Install
      */
     public function after_plugin_activation()
     {
+        /**
+         * mangapress_after_plugin_activation
+         * Allow other plugins to add to Manga+Press' activation sequence.
+         *
+         * @return void
+         */
+        do_action('mangapress_after_plugin_activation');
+
+
+        // if the option already exists, exit
+        if (get_option('mangapress_default_category')) {
+            return;
+        }
+
+        // create a default series category
+        $term = wp_insert_term(
+            'Default Series',
+            MangaPress_Posts::TAX_SERIES,
+            array(
+                'description' => __('Default Series category created when plugin is activated. It is suggested that you rename this category.', MP_DOMAIN),
+                'slug'        => 'default-series',
+            )
+        );
+
+        if (!($term instanceof WP_Error)) {
+            add_option('mangapress_default_category', $term['term_id'], '', 'no');
+        }
     }
 
 
@@ -103,6 +133,8 @@ class MangaPress_Install
      */
     public function do_deactivate()
     {
+        delete_option('rewrite_rules');
+        flush_rewrite_rules(false);
     }
 
     /**
@@ -112,6 +144,9 @@ class MangaPress_Install
      */
     public function do_upgrade()
     {
+        update_option('mangapress_ver', MP_VERSION);
+        delete_option( 'mangapress_upgrade' );
+        flush_rewrite_rules(false);
     }
 
 

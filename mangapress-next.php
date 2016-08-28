@@ -53,6 +53,8 @@ if (!defined('MP_DOMAIN'))
     define('MP_DOMAIN', 'mangapress');
 
 require_once MP_ABSPATH . 'mangapress-options.php';
+require_once MP_ABSPATH . 'mangapress-posts.php';
+require_once MP_ABSPATH . 'mangapress-bootstrap.php';
 require_once MP_ABSPATH . 'mangapress-install.php';
 
 $install = MangaPress_Install::get_instance();
