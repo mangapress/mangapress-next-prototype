@@ -69,15 +69,9 @@ class MangaPress_Install
     {
         self::$version = strval( get_option('mangapress_next_ver') );
 
-        if (self::$version == '') {
-            add_option( 'mangapress_next_ver', MP_VERSION, '', 'no');
-            add_option( 'mangapress_options', serialize( MangaPress_Options::get_default_options() ), '', 'no' );
-        }
-
-        if (version_compare(self::$version, MP_VERSION, '<')
-            && !(self::$version == '')) {
-            add_option( 'mangapress_upgrade', 'yes', '', 'no');
-        }
+        $this->do_migrate();
+        $this->do_install();
+        $this->check_to_upgrade();
 
         MangaPress_Bootstrap::get_instance()->init();
         $this->after_plugin_activation();
@@ -86,6 +80,43 @@ class MangaPress_Install
     }
 
 
+    /**
+     * Run install. Right now, simply involves
+     */
+    public function do_install()
+    {
+        if (self::$version == '') {
+            self::$version = MP_VERSION;
+            add_option('mangapress_next_ver', MP_VERSION, '', 'no');
+            add_option('mangapress_next_options', serialize(MangaPress_Options::get_default_options()), '', 'no');
+        }
+    }
+
+
+    /**
+     * Migrate old Manga+Press Options
+     */
+    public function do_migrate()
+    {
+        // check for old version, retrieve if it exists
+        if (get_option('mangapress_ver')) {
+            $mp_options = get_option( 'mangapress_options' );
+
+            update_option('mangapress_next_options', maybe_serialize(array_merge($mp_options, MangaPress_Options::get_default_options())));
+            delete_option('mangapress_ver');
+        }
+    }
+
+
+    /**
+     * Check version to see if upgrade is needed
+     */
+    public function check_to_upgrade()
+    {
+        if (version_compare(self::$version, MP_VERSION, '<')) {
+            add_option( 'mangapress_upgrade', 'yes', '', 'no');
+        }
+    }
 
 
     /**
@@ -148,13 +179,29 @@ class MangaPress_Install
         do_action('mangapress_upgrade');
 
         update_option('mangapress_next_ver', MP_VERSION);
-        delete_option( 'mangapress_upgrade' );
+        delete_option('mangapress_upgrade');
+        delete_option('mangapress_ver');
+
         flush_rewrite_rules(false);
     }
 
 
+    /**
+     * Get current version
+     * @return string
+     */
     public static function getVersion()
     {
         return self::$version;
+    }
+
+
+    /**
+     * Set current version
+     * @param string $ver
+     */
+    private static function setVersion($ver)
+    {
+        self::$version = $ver;
     }
 }
