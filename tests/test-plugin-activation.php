@@ -66,7 +66,7 @@ class PluginActivationTest extends WP_UnitTestCase
      */
     public function test_default_options()
     {
-        $this->assertNotEmpty(unserialize(get_option('mangapress_options')));
+        $this->assertNotEmpty(unserialize(get_option('mangapress_next_options')));
     }
 
 

@@ -59,6 +59,11 @@ class MangaPress_Install
         return self::$instance;
     }
 
+    private function __construct()
+    {
+        self::$version = strval( get_option('mangapress_next_ver') );
+    }
+
 
     /**
      * Static function for plugin activation.
@@ -67,8 +72,6 @@ class MangaPress_Install
      */
     public function do_activate()
     {
-        self::$version = strval( get_option('mangapress_next_ver') );
-
         $this->do_migrate();
         $this->do_install();
         $this->check_to_upgrade();
@@ -104,6 +107,7 @@ class MangaPress_Install
 
             update_option('mangapress_next_options', maybe_serialize(array_merge($mp_options, MangaPress_Options::get_default_options())));
             delete_option('mangapress_ver');
+            delete_option('mangapress_options');
         }
     }
 

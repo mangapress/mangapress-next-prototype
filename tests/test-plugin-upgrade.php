@@ -44,12 +44,8 @@ class PluginUpgradeTest extends WP_UnitTestCase
      */
     public function test_upgrade()
     {
-        $current_old_version = get_option('mangapress_ver');
-
         // old version should not equal the current about-to-be-installed version
         // nor should it be empty
-        $this->assertNotEquals($current_old_version, MP_VERSION);
-        $this->assertNotEmpty($current_old_version);
         $this->assertNotFalse(did_action('mangapress_upgrade'));
 
         // upgrade option should be created
