@@ -122,7 +122,7 @@ class MangaPress_Install
     public function check_to_upgrade()
     {
         if (version_compare(self::$version, MP_VERSION, '<')) {
-            add_option( 'mangapress_upgrade', 'yes', '', 'no');
+            $this->do_upgrade();
         }
     }
 

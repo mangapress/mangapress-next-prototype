@@ -34,6 +34,6 @@ class PluginUpgradeTest extends WP_UnitTestCase
 
     public function test_upgrade()
     {
-        $this->assertTrue(did_action('mangapress_upgrade'));
+        $this->assertEquals(did_action('mangapress_upgrade'), 0);
     }
 }

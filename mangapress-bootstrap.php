@@ -119,9 +119,5 @@ class MangaPress_Bootstrap
     {
         $this->_posts_helper   = new MangaPress_Posts();
         $this->_options_helper = new MangaPress_Options();
-
-        if (get_option('mangapress_upgrade') == 'yes') {
-            MangaPress_Install::get_instance()->do_upgrade();
-        }
     }
 }
