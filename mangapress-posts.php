@@ -94,6 +94,7 @@ class MangaPress_Posts
     public function __construct()
     {
         $this->register_content_types();
+        $this->rewrite_rules();
     }
 
 
@@ -130,6 +131,88 @@ class MangaPress_Posts
                 self::TAX_SERIES,
             ),
         ));
+    }
+
+
+    /**
+     * Add new rewrite rules for Comic post-type
+     */
+    private function rewrite_rules()
+    {
+        $post_type = self::POST_TYPE;
+        $slug      = self::SLUG;
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/feed/(feed|rdf|rss|rss2|atom)/?$",
+            'index.php?year=$matches[1]&monthnum=$matches[2]&day=$matches[3]&feed=$matches[4]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/(feed|rdf|rss|rss2|atom)/?$",
+            'index.php?year=$matches[1]&monthnum=$matches[2]&day=$matches[3]&feed=$matches[4]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/page/?([0-9]{1,})/?$",
+            'index.php?year=$matches[1]&monthnum=$matches[2]&day=$matches[3]&paged=$matches[4]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/([0-9]{1,2})/([0-9]{1,2})/?$",
+            'index.php?year=$matches[1]&monthnum=$matches[2]&day=$matches[3]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/([0-9]{1,2})/feed/(feed|rdf|rss|rss2|atom)/?$",
+            'index.php?year=$matches[1]&monthnum=$matches[2]&feed=$matches[3]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/([0-9]{1,2})/(feed|rdf|rss|rss2|atom)/?$",
+            'index.php?year=$matches[1]&monthnum=$matches[2]&feed=$matches[3]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/([0-9]{1,2})/page/?([0-9]{1,})/?$",
+            'index.php?year=$matches[1]&monthnum=$matches[2]&paged=$matches[3]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/([0-9]{1,2})/?$",
+            'index.php?year=$matches[1]&monthnum=$matches[2]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/feed/(feed|rdf|rss|rss2|atom)/?$",
+            'index.php?year=$matches[1]&feed=$matches[2]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/(feed|rdf|rss|rss2|atom)/?$",
+            'index.php?year=$matches[1]&feed=$matches[2]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/page/?([0-9]{1,})/?$",
+            'index.php?year=$matches[1]&paged=$matches[2]&post_type=' .  $post_type,
+            'top'
+        );
+
+        add_rewrite_rule(
+            "{$slug}/([0-9]{4})/?$",
+            'index.php?year=$matches[1]&post_type=' .  $post_type,
+            'top'
+        );
     }
 
 

@@ -61,3 +61,5 @@ $install = MangaPress_Install::get_instance();
 
 register_activation_hook(__FILE__, array($install, 'do_activate'));
 register_deactivation_hook(__FILE__, array($install, 'do_deactivate'));
+
+add_action('plugins_loaded', array('MangaPress_Bootstrap', 'load_plugin'));
