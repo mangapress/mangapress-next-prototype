@@ -59,6 +59,7 @@ class MangaPress_Install
         return self::$instance;
     }
 
+
     private function __construct()
     {
         self::$version = strval( get_option('mangapress_next_ver') );
@@ -84,7 +85,7 @@ class MangaPress_Install
 
 
     /**
-     * Run install. Right now, simply involves
+     * Run install. Right now, simply involves adding new version and migrating old options to new
      */
     public function do_install()
     {
@@ -105,7 +106,10 @@ class MangaPress_Install
         if (get_option('mangapress_ver')) {
             $mp_options = get_option( 'mangapress_options' );
 
-            update_option('mangapress_next_options', maybe_serialize(array_merge($mp_options, MangaPress_Options::get_default_options())));
+            add_option('mangapress_next_options', maybe_serialize(array_merge($mp_options, MangaPress_Options::get_default_options())));
+            add_option('mangapress_next_ver', MP_VERSION);
+            self::$version = MP_VERSION;
+
             delete_option('mangapress_ver');
             delete_option('mangapress_options');
         }
