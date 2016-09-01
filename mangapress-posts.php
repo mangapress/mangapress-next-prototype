@@ -71,13 +71,6 @@ class MangaPress_Posts
 
     private static $instance = null;
 
-    /**
-     * Class for initializing custom post-type
-     *
-     * @var MangaPress_PostType
-     */
-    private $_post_type = null;
-
 
     public static function get_instance()
     {

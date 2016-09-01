@@ -19,7 +19,11 @@ class PluginLoadTest extends WP_UnitTestCase
 
     public function test_init()
     {
+        global $wp_post_types, $wp_taxonomies;
+
         $this->assertNotEquals(did_action('init'), 0);
+        $this->assertTrue(in_array(MangaPress_Posts::POST_TYPE, array_keys($wp_post_types)));
+        $this->assertTrue(in_array(MangaPress_Posts::TAX_SERIES, array_keys($wp_taxonomies)));
     }
 
 }
