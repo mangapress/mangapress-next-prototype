@@ -9,6 +9,13 @@ The next generation of Manga+Press, the webcomic management system for WordPress
 
 Manga+Press is a webcomic managment system for WordPress. Manga+Press uses WordPress' posts, pages and categories to help you keep track of your comic posts. Manga+Press also includes its own custom template tags to help make creating themes easier.
 
+
+## TODO
+    * Unit tests for post creation, saving
+    * Re-write comic navigation system
+    * Add check for PHP version. M+P Next will require PHP 5.3 or higher
+    
+    
 ## Changelog
 ### 0.0.1
    * Ground-up rebuild of Manga+Press core. Includes unit tests.
