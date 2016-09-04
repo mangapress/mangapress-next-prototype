@@ -81,6 +81,7 @@ class MangaPress_Posts
         return self::$instance;
     }
 
+
     /**
      * Constructor
      */
@@ -88,6 +89,18 @@ class MangaPress_Posts
     {
         $this->register_content_types();
         $this->rewrite_rules();
+
+        // Setup Manga+Press Post Options box
+        add_action("wp_ajax_" . self::ACTION_GET_IMAGE_HTML, 'MangaPress\Posts\get_image_html_ajax');
+        add_action("wp_ajax_" . self::ACTION_REMOVE_IMAGE, 'MangaPress\Posts\get_image_html_ajax');
+        add_action('save_post_mangapress_comic', 'MangaPress\Posts\save_post', 500, 2);
+        add_action('admin_enqueue_scripts', 'MangaPress\Posts\enqueue_scripts');
+
+        /*
+         * Actions and filters for modifying our Edit Comics page.
+         */
+        add_action('manage_posts_custom_column', 'MangaPress\Posts\comics_headers');
+        add_filter('manage_edit-mangapress_comic_columns', 'MangaPress\Posts\comics_columns');
     }
 
 
@@ -206,41 +219,6 @@ class MangaPress_Posts
             'index.php?year=$matches[1]&post_type=' .  $post_type,
             'top'
         );
-    }
-
-
-    /**
-     * Meta box call-back function.
-     *
-     * @return void
-     */
-    public function meta_box_cb()
-    {
-        add_meta_box(
-            'comic-image',
-            __('Comic Image', MP_DOMAIN),
-            array($this, 'comic_meta_box_cb'),
-            self::POST_TYPE,
-            'normal',
-            'high'
-        );
-
-        /*
-         * Because we don't need this...the comic image is the "Featured Image"
-         * TODO add an option for users to override this "functionality"
-         */
-        remove_meta_box('postimagediv', 'mangapress_comic', 'side');
-    }
-
-
-    /**
-     * Comic meta box
-     *
-     * @return void
-     */
-    public function comic_meta_box_cb()
-    {
-        require_once MP_ABSPATH . 'includes/pages/meta-box-add-comic.php';
     }
 
 }

@@ -50,8 +50,9 @@ if (!defined('MP_LANG'))
     define('MP_LANG', $plugin_folder . '/languages');
 
 if (!defined('MP_DOMAIN'))
-    define('MP_DOMAIN', 'mangapress');
+    define('MP_DOMAIN', 'mangapress-next');
 
+require_once MP_ABSPATH . 'includes/posts-functions.php';
 require_once MP_ABSPATH . 'mangapress-options.php';
 require_once MP_ABSPATH . 'mangapress-posts.php';
 require_once MP_ABSPATH . 'mangapress-bootstrap.php';
