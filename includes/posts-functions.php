@@ -125,6 +125,15 @@ function save_post($post_id, $post)
         set_post_thumbnail($post_id, $image_ID);
     }
 
+    set_post_terms($post_id);
+
+    return $post_id;
+}
+
+
+function set_post_terms($post_id)
+{
+    var_dump('here');
     // if no terms have been assigned, assign the default
     if (!isset($_POST['tax_input'][\MangaPress_Posts::TAX_SERIES][0])
         || ($_POST['tax_input'][\MangaPress_Posts::TAX_SERIES][0] == 0
@@ -136,8 +145,6 @@ function save_post($post_id, $post)
         // continue as normal
         wp_set_post_terms($post_id, $_POST['tax_input'][\MangaPress_Posts::TAX_SERIES], \MangaPress_Posts::TAX_SERIES);
     }
-
-    return $post_id;
 }
 
 
