@@ -3,6 +3,8 @@
 * Donate link: http://www.manga-press.com/
 * License: GPLv2
 
+[![Build Status](https://travis-ci.org/mangapress/mangapress-next.svg?branch=master)](https://travis-ci.org/mangapress/mangapress-next)
+
 The next generation of Manga+Press, the webcomic management system for WordPress.
 
 ## Description
