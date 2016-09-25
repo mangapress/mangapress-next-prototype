@@ -42,6 +42,6 @@ class ComicPostTest extends WP_UnitTestCase
         ));
 
         $tax = wp_get_post_terms($post_id, MangaPress_Posts::TAX_SERIES);
-        $this->assertNotEmpty($tax);
+        $this->assertEmpty($tax);
     }
 }
