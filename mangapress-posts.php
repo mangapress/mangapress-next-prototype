@@ -109,6 +109,7 @@ class MangaPress_Posts
      */
     private function register_content_types()
     {
+        global $wp_post_types;
         register_taxonomy(self::TAX_SERIES, array(self::POST_TYPE), array(
             'label' => __('Series', MP_DOMAIN),
             'singular_name' => __('Series', MP_DOMAIN),
@@ -120,19 +121,24 @@ class MangaPress_Posts
         ));
 
         register_post_type(self::POST_TYPE, array(
-            'label'    => __('Comics', MP_DOMAIN),
-            'singular_name'    => __('Comic', MP_DOMAIN),
+            'labels' => array(
+                'name' =>  __('Comics', MP_DOMAIN),
+                'singular_name'    => __('Comic', MP_DOMAIN)
+            ),
             'supports'      => array(
                 'title',
                 'comments',
-                'thumbnails',
+                'thumbnail',
                 'publicize',
             ),
+            'public' => true,
+            'show_in_menu' => true,
             'register_meta_box_cb' => array($this, 'meta_box_cb'),
             'menu_icon' => null,
             'rewrite'   => array(
                 'slug' => self::SLUG,
             ),
+            'has_archive' => true,
             'taxonomies' => array(
                 self::TAX_SERIES,
             ),
