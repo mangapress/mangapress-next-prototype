@@ -4,8 +4,8 @@ module.exports = function (grunt) {
     // other than build a deployable plugin
     var path = require('path'),
         fs = require( 'fs' ),
-        SOURCE_DIR = 'src/',
         BUILD_DIR = 'build/',
+        version = getVersion(),
         autoprefixer = require('autoprefixer');
 
     grunt.initConfig({
@@ -27,7 +27,7 @@ module.exports = function (grunt) {
                             '!package.json',
                             '!phpunit.xml.dist'
                         ],
-                        dest: 'build/'
+                        dest: BUILD_DIR + version + '/'
                     }
                 ]
             }
@@ -45,6 +45,15 @@ module.exports = function (grunt) {
                 cmd: 'phpunit',
                 args: ['-c', 'phpunit.xml.dist', '--group', 'external-http']
             }
+        },
+        watch: {
+            scripts: {
+                files: ['**/*.php'],
+                tasks: ['phpunit'],
+                options: {
+                    spawn: false
+                }
+            }
         }
     });
 
@@ -60,4 +69,26 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['phpunit', 'copy']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
+    /**
+     * Reads the main plugin file and returns a version number
+     * @returns {string}
+     */
+    function getVersion() {
+        var css = fs.readFileSync('mangapress-next.php', 'utf8'),
+            pluginHeaders = {
+                'Version' : ""
+            },
+            e = css.substr(0, 8196).replace("\r", "\n");
+        for (var regex in pluginHeaders) {
+            var regString = '^[ \t\/*#@]*\/var/\:(.*)$'.replace('/var/', regex),
+                reg = new RegExp(regString, 'mi'),
+                matches = e.match(reg);
+
+            pluginHeaders[regex] = matches[1].trim();
+        }
+
+        return pluginHeaders.Version;
+    }
 };
