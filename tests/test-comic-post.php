@@ -11,17 +11,35 @@
 class ComicPostTest extends WP_UnitTestCase
 {
 
+
+    /**
+     * @var \MangaPress_Install
+     */
+    private $mangapressInstall;
+
     public function setUp()
     {
+        $this->mangapressInstall = MangaPress_Install::get_instance();
+        $this->mangapressInstall->do_activate();
+
         parent::setUp();
     }
 
 
     public function tearDown()
     {
-        $this->remove_added_uploads();
+        $this->mangapressInstall->do_deactivate();
         parent::tearDown();
     }
+
+
+    public function test_post_type_public()
+    {
+        global $wp_post_types;
+
+        $this->assertTrue($wp_post_types[MangaPress_Posts::POST_TYPE]->public);
+    }
+
 
     public function test_post_save()
     {
@@ -43,5 +61,15 @@ class ComicPostTest extends WP_UnitTestCase
 
         $tax = wp_get_post_terms($post_id, MangaPress_Posts::TAX_SERIES);
         $this->assertEmpty($tax);
+        $default_cat = false;
+        if (empty($tax)) {
+            $default_cat = get_option('mangapress_default_category');
+            $this->assertNotFalse($default_cat);
+
+            wp_set_post_terms($post_id, $default_cat, MangaPress_Posts::TAX_SERIES);
+        }
+
+        $tax = wp_get_post_terms($post_id, MangaPress_Posts::TAX_SERIES);
+        $this->assertNotEmpty($tax);
     }
 }

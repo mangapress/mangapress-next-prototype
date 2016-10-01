@@ -133,7 +133,6 @@ function save_post($post_id, $post)
 
 function set_post_terms($post_id)
 {
-    var_dump('here');
     // if no terms have been assigned, assign the default
     if (!isset($_POST['tax_input'][\MangaPress_Posts::TAX_SERIES][0])
         || ($_POST['tax_input'][\MangaPress_Posts::TAX_SERIES][0] == 0
