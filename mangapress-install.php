@@ -73,6 +73,10 @@ class MangaPress_Install
      */
     public function do_activate()
     {
+        if (version_compare(phpversion(), '5.3', '<')) {
+            wp_die(__('This plugin requires PHP 5.3 or higher. If you\'re running php 5.2.x, please use Manga+Press 2.9.x.'));
+        }
+
         $this->do_migrate();
         $this->do_install();
         $this->check_to_upgrade();
@@ -89,6 +93,7 @@ class MangaPress_Install
      */
     public function do_install()
     {
+
         if (self::$version == '') {
             self::$version = MP_VERSION;
             add_option('mangapress_next_ver', MP_VERSION, '', 'no');
