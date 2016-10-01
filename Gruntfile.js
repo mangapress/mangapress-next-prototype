@@ -41,10 +41,6 @@ module.exports = function (grunt) {
                 cmd: 'phpunit',
                 args: ['-c', 'phpunit.xml.dist', '--group', 'ajax']
             },
-            multisite: {
-                cmd: 'phpunit',
-                args: ['-c', 'tests/phpunit/multisite.xml']
-            },
             'external-http': {
                 cmd: 'phpunit',
                 args: ['-c', 'phpunit.xml.dist', '--group', 'external-http']
@@ -60,6 +56,8 @@ module.exports = function (grunt) {
             opts: {stdio: 'inherit'}
         }, this.async());
     });
+
+    grunt.registerTask('build', ['phpunit', 'copy']);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
 };
