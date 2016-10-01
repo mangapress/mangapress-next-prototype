@@ -67,7 +67,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('build', ['phpunit', 'copy']);
-
+    grunt.registerTask('update-readmes', updateReadmes);
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
@@ -76,11 +76,12 @@ module.exports = function (grunt) {
      * @returns {string}
      */
     function getVersion() {
-        var css = fs.readFileSync('mangapress-next.php', 'utf8'),
+        var pluginInfo = fs.readFileSync('mangapress-next.php', 'utf8'),
             pluginHeaders = {
                 'Version' : ""
             },
-            e = css.substr(0, 8196).replace("\r", "\n");
+            e = pluginInfo.substr(0, 8196).replace("\r", "\n");
+
         for (var regex in pluginHeaders) {
             var regString = '^[ \t\/*#@]*\/var/\:(.*)$'.replace('/var/', regex),
                 reg = new RegExp(regString, 'mi'),
@@ -90,5 +91,18 @@ module.exports = function (grunt) {
         }
 
         return pluginHeaders.Version;
+    }
+
+    function updateReadmes() {
+        var version = getVersion(),
+            readMeTxt = fs.readFileSync('readme.txt', 'utf8'),
+            regString = '^[ \t\/*#@]*\Stable tag\:(.*)$',
+            reg = new RegExp(regString, 'mi'),
+            matches = readMeTxt.match(reg),
+            newStable = matches[0].replace(/:(.*)$/mi, ': ' + version),
+            newReadmeTxt = readMeTxt.replace(matches[0], newStable);
+
+        fs.writeFileSync('readme.txt', newReadmeTxt, 'utf8');
+        console.info('readme.txt updated!');
     }
 };
