@@ -66,7 +66,7 @@ module.exports = function (grunt) {
         }, this.async());
     });
 
-    grunt.registerTask('build', ['phpunit', 'copy']);
+    grunt.registerTask('build', ['phpunit', 'update-readmes', 'copy']);
     grunt.registerTask('update-readmes', updateReadmes);
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
