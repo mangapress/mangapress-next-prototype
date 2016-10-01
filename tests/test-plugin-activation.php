@@ -34,6 +34,12 @@ class PluginActivationTest extends WP_UnitTestCase
     }
 
 
+    public function test_php_version()
+    {
+        $this->assertTrue(version_compare(phpversion(), '5.3', '>'));
+    }
+
+
     /**
      * Test for WP_DEBUG
      */
