@@ -131,9 +131,13 @@ function save_post($post_id, $post)
 }
 
 
+/**
+ * Set comic post terms
+ *
+ * @param int $post_id
+ */
 function set_post_terms($post_id)
 {
-    var_dump('here');
     // if no terms have been assigned, assign the default
     if (!isset($_POST['tax_input'][\MangaPress_Posts::TAX_SERIES][0])
         || ($_POST['tax_input'][\MangaPress_Posts::TAX_SERIES][0] == 0
@@ -150,9 +154,6 @@ function set_post_terms($post_id)
 
 /**
  * Enqueue scripts for post-edit and post-add screens
- *
- * @global WP_Post $post
- * @return void
  */
 function enqueue_scripts()
 {
@@ -191,7 +192,7 @@ function enqueue_scripts()
 /**
  * Modify header columns for Comic Post-type
  *
- * @global WP_Post $post
+ * @global \WP_Post $post
  * @param array $column
  * @return void
  */
