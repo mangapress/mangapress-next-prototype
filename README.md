@@ -13,8 +13,6 @@ Manga+Press is a webcomic managment system for WordPress. Manga+Press uses WordP
 
 
 ## TODO
- * Unit tests for comic post CRUD operations
-    * Use (https://core.trac.wordpress.org/browser/trunk/tests/phpunit/tests/post/attachments.php) as example for testing uploads
  * Re-write comic navigation system
  * Create visual unit tests (CSS/HTML) for comic posts, navigation, etc.
     

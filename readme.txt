@@ -2,9 +2,9 @@
 Contributors: ArdathkSheyna
 Donate link: http://www.manga-press.com/
 Tags: webcomics, online comics
-Requires at least: 3.8
-Tested up to: 4.4
-Stable tag: 1.0.0
+Requires at least: 4.7
+Tested up to: 4.7
+Stable tag: 0.0.1
 License: GPLv2
 
 Manga+Press NEXT is a webcomic management system for WordPress.
