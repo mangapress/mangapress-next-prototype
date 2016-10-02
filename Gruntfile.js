@@ -4,9 +4,9 @@ module.exports = function (grunt) {
     // other than build a deployable plugin
     var path = require('path'),
         fs = require( 'fs' ),
-        BUILD_DIR = 'build/',
         version = getVersion(),
-        autoprefixer = require('autoprefixer');
+        BUILD_DIR_VER = 'build/' + version + '/',
+        BUILD_DIR = BUILD_DIR_VER + 'mangapress-next/';
 
     grunt.initConfig({
         copy: {
@@ -27,7 +27,7 @@ module.exports = function (grunt) {
                             '!package.json',
                             '!phpunit.xml.dist'
                         ],
-                        dest: BUILD_DIR + version + '/'
+                        dest: BUILD_DIR
                     }
                 ]
             }
@@ -54,6 +54,22 @@ module.exports = function (grunt) {
                     spawn: false
                 }
             }
+        },
+        compress: {
+            main: {
+                options: {
+                    archive: BUILD_DIR_VER + 'mangapress-next.zip'
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: BUILD_DIR,
+                        src: ['**'],
+                        dest: 'mangapress-next',
+                        filter: 'isFile'
+                    }
+                ]
+            }
         }
     });
 
@@ -66,10 +82,11 @@ module.exports = function (grunt) {
         }, this.async());
     });
 
-    grunt.registerTask('build', ['phpunit', 'update-readmes', 'copy']);
+    grunt.registerTask('build', ['phpunit', 'update-readmes', 'copy', 'compress']);
     grunt.registerTask('update-readmes', updateReadmes);
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-compress');
 
     /**
      * Reads the main plugin file and returns a version number
@@ -93,6 +110,12 @@ module.exports = function (grunt) {
         return pluginHeaders.Version;
     }
 
+
+    /**
+     * Update readme.txt with new version number
+     * @todo Add comparison for version numbers to determine if update is necessary
+     * @todo Find a way to use version number from package.json to keep plugin and readmes updated`
+     */
     function updateReadmes() {
         var version = getVersion(),
             readMeTxt = fs.readFileSync('readme.txt', 'utf8'),
