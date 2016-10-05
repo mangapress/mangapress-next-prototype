@@ -9,6 +9,23 @@ module.exports = function (grunt) {
         BUILD_DIR = BUILD_DIR_VER + 'mangapress-next/';
 
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+        pot: {
+            options: {
+                dest: 'languages/',
+                text_domain : '<%=pkg.name%>',
+                keywords: ['__','_e','_n','_x','esc_html_e'] // functions to look for
+            },
+            files: {
+                src:  [
+                    '!tests/*',
+                    '!bin/*',
+                    '!node_modules/*',
+                    '**/*.php'
+                ], //Parse all php files
+                expand: true
+            }
+        },
         copy: {
             files: {
                 files: [
@@ -84,9 +101,11 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', ['phpunit', 'update-readmes', 'copy', 'compress']);
     grunt.registerTask('update-readmes', updateReadmes);
+
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-pot');
 
     /**
      * Reads the main plugin file and returns a version number
