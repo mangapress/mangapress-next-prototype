@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: mangapress-next 0.0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-05 19:47-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: mangapress-install.php:77
+msgid ""
+"This plugin requires PHP 5.3 or higher. If you're running php 5.2.x, please "
+"use Manga+Press 2.9.x."
+msgstr ""
+
+#: mangapress-install.php:163
+msgid ""
+"Default Series category created when plugin is activated. It is suggested "
+"that you rename this category."
+msgstr ""
+
+#: mangapress-posts.php:114 mangapress-posts.php:115
+#: includes/posts-functions.php:250
+msgid "Series"
+msgstr ""
+
+#: mangapress-posts.php:125
+msgid "Comics"
+msgstr ""
+
+#: mangapress-posts.php:126
+msgid "Comic"
+msgstr ""
+
+#: includes/posts-functions.php:18
+msgid "Comic Image"
+msgstr ""
+
+#: includes/posts-functions.php:183
+msgid "Upload or Choose Your Comic Image File"
+msgstr ""
+
+#: includes/posts-functions.php:184
+msgid "Insert Comic into Post"
+msgstr ""
+
+#: includes/posts-functions.php:248
+msgid "Thumbnail"
+msgstr ""
+
+#: includes/posts-functions.php:249
+msgid "Comic Title"
+msgstr ""
+
+#: includes/posts-functions.php:251
+msgid "Description"
+msgstr ""

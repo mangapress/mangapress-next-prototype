@@ -18,11 +18,9 @@ module.exports = function (grunt) {
             },
             files: {
                 src:  [
-                    '!tests/*',
-                    '!bin/*',
-                    '!node_modules/*',
-                    '**/*.php'
-                ], //Parse all php files
+                    'mangapress-*.php',
+                    'includes/*.php'
+                ],
                 expand: true
             }
         },
