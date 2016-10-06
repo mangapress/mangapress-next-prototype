@@ -97,7 +97,7 @@ module.exports = function (grunt) {
         }, this.async());
     });
 
-    grunt.registerTask('build', ['phpunit', 'update-readmes', 'copy', 'compress']);
+    grunt.registerTask('build', ['phpunit', 'update-readmes', 'pot', 'copy', 'compress']);
     grunt.registerTask('update-readmes', updateReadmes);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
