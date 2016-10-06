@@ -4,9 +4,7 @@ module.exports = function (grunt) {
     // other than build a deployable plugin
     var path = require('path'),
         fs = require( 'fs' ),
-        version = getVersion(),
-        BUILD_DIR_VER = 'build/' + version + '/',
-        BUILD_DIR = BUILD_DIR_VER + 'mangapress-next/';
+        BUILD_DIR = 'build/';
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -28,9 +26,6 @@ module.exports = function (grunt) {
             files: {
                 files: [
                     {
-                        // dot: true,
-                        // expand: true,
-                        // cwd: SOURCE_DIR,
                         src: [
                             '**',
                             '!**/.{svn,git}/**', // Ignore version control directories.
@@ -42,7 +37,7 @@ module.exports = function (grunt) {
                             '!package.json',
                             '!phpunit.xml.dist'
                         ],
-                        dest: BUILD_DIR
+                        dest: BUILD_DIR + '/<%= pkg.version %>/mangapress-next/'
                     }
                 ]
             }
@@ -73,7 +68,7 @@ module.exports = function (grunt) {
         compress: {
             main: {
                 options: {
-                    archive: BUILD_DIR_VER + 'mangapress-next.zip'
+                    archive: BUILD_DIR + '/<%= pkg.version %>/mangapress-next.zip'
                 },
                 files: [
                     {
