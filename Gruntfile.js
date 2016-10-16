@@ -80,9 +80,14 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', ['phpunit', 'update-readmes', 'copy', 'compress']);
     grunt.registerTask('update-readmes', updateReadmes);
+    grunt.registerTask('build-readme', buildReadme);
+
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-git-log-json');
+    grunt.loadNpmTasks('grunt-pot');
+
 
     /**
      * Reads the main plugin file and returns a version number
@@ -123,5 +128,9 @@ module.exports = function (grunt) {
 
         fs.writeFileSync('readme.txt', newReadmeTxt, 'utf8');
         console.info('readme.txt updated!');
+    }
+
+    function buildReadme() {
+
     }
 };
