@@ -1,0 +1,23 @@
+{
+    "name" : "",
+    "contributors" : "",
+    "version" : "",
+    "donatelink" : "",
+    "tags" : [],
+    "requires": "",
+    "tested" : "",
+    "stable": "",
+    "license" : "",
+    "content" : {
+        "short_description" : "",
+        "description": "",
+        "changelog": [{
+            "major.version" : {
+                "minor.version" : [
+                  "bullet change 1",
+                  "bullet change 2"
+                ]
+            }
+        }]
+    }
+}
