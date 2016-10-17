@@ -77,7 +77,7 @@ class ComicPostTest extends WP_UnitTestCase
     public function test_comic_navigation()
     {
         // create a bunch of posts
-        $this->factory()->post->create_many(10);
+        $this->factory()->post->create_many(10, array('post_type' => MangaPress_Posts::POST_TYPE));
     }
 
 }
