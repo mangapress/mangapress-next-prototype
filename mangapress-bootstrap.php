@@ -43,22 +43,6 @@ class MangaPress_Bootstrap
 
 
     /**
-     * Admin page helper
-     *
-     * @var MangaPress_Admin
-     */
-    protected $_admin_helper;
-
-
-    /**
-     * Flash Message helper
-     *
-     * @var MangaPress_FlashMessages
-     */
-    protected $_flashmessage_helper;
-
-
-    /**
      * Static function used to initialize Bootstrap
      *
      * @return void
