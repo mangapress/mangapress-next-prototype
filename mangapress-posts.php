@@ -133,7 +133,7 @@ class MangaPress_Posts
             ),
             'public' => true,
             'show_in_menu' => true,
-            'register_meta_box_cb' => array($this, 'meta_box_cb'),
+            'register_meta_box_cb' => 'MangaPress\Posts\meta_box_cb',
             'menu_icon' => null,
             'rewrite'   => array(
                 'slug' => self::SLUG,

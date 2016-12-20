@@ -83,11 +83,27 @@ class MangaPress_Bootstrap
      * Run init functionality
      *
      * @see init() hook
-     * @return void
      */
     public function init()
     {
         $this->_posts_helper   = new MangaPress_Posts();
         $this->_options_helper = new MangaPress_Options();
+
+        add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
+    }
+
+
+    /**
+     * Enqueue admin-related styles
+     */
+    public function admin_enqueue_scripts()
+    {
+        wp_enqueue_style(
+            'mangapress-icons',
+            plugins_url('assets/styles/font.css', __FILE__),
+            null,
+            MP_VERSION,
+            'screen'
+        );
     }
 }

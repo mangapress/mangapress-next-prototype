@@ -16,7 +16,7 @@ function meta_box_cb()
     add_meta_box(
         'comic-image',
         __('Comic Image', MP_DOMAIN),
-        array($this, 'comic_meta_box_cb'),
+        'MangaPress\Posts\comic_meta_box_cb',
         \MangaPress_Posts::POST_TYPE,
         'normal',
         'high'
@@ -170,7 +170,7 @@ function enqueue_scripts()
     wp_enqueue_media();
     wp_register_script(
         'mangapress-media-popup',
-        plugins_url( '/assets/js/add-comic.js', __FILE__ ),
+        MP_URLPATH . 'assets/scripts/add-comic.js',
         array( 'jquery' ),
         MP_VERSION,
         true
