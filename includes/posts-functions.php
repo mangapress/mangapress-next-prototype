@@ -204,7 +204,7 @@ function comics_headers($column)
         echo "<input type=\"checkbox\" value=\"{$post->ID}\" name=\"post[]\" />";
     } elseif ("thumbnail" == $column) {
 
-        $thumbnail_html = get_the_post_thumbnail($post->ID, 'comic-admin-thumb', array('class' => 'wp-caption'));
+        $thumbnail_html = get_the_post_thumbnail($post->ID, 'thumbnail', array('class' => 'wp-caption'));
 
         if ($thumbnail_html) {
             $edit_link = get_edit_post_link($post->ID, 'display');
