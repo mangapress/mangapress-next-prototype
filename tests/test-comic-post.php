@@ -72,4 +72,12 @@ class ComicPostTest extends WP_UnitTestCase
         $tax = wp_get_post_terms($post_id, MangaPress_Posts::TAX_SERIES);
         $this->assertNotEmpty($tax);
     }
+
+
+    public function test_comic_navigation()
+    {
+        // create a bunch of posts
+        $this->factory()->post->create_many(10, array('post_type' => MangaPress_Posts::POST_TYPE));
+    }
+
 }

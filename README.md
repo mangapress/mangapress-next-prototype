@@ -1,4 +1,5 @@
-# Manga+Press NEXT Comic Manager
+Manga+Press NEXT Comic Manager
+===
 * Contributors: Jess Green
 * Donate link: http://www.manga-press.com/
 * License: GPLv2
@@ -7,24 +8,24 @@
 
 The next generation of Manga+Press, the webcomic management system for WordPress.
 
-## Description
+### Description
 
 Manga+Press is a webcomic managment system for WordPress. Manga+Press uses WordPress' posts, pages and categories to help you keep track of your comic posts. Manga+Press also includes its own custom template tags to help make creating themes easier.
 
 
-## TODO
+### TODO
  * Re-write comic navigation system
  * Create visual unit tests (CSS/HTML) for comic posts, navigation, etc.
     
     
-## Changelog
-### 0.0.1
+### Changelog
+#### 0.0.1
    * Ground-up rebuild of Manga+Press core. Includes unit tests.
 
-## System Requirements
+### System Requirements
    * PHP 5.3 or newer    
 
-## Installation
+### Installation
 
 1. Unpack the .zip file onto your hard drive.
 
@@ -36,7 +37,7 @@ Manga+Press is a webcomic managment system for WordPress. Manga+Press uses WordP
 
 6. Click on the Manga+Press Options tab under Settings and go to Basic Manga+Press Options, and set Latest Comic Page, and Comic Archive Page to your two newly created pages.
 
-## Credits
+### Credits
 
 (c) 2008-2016 Jess C. Green
 

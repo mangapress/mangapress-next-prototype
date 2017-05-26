@@ -1,6 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 /build
 node_modules
+*.phar
 
 ### WordPress template
 *.log
