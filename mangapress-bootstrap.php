@@ -2,8 +2,7 @@
 /**
  * Plugin bootstrap class.
  *
- * @package MangaPress
- * @subpackage MangaPress_Bootstrap
+ * @package MangaPress_Next\MangaPress_Bootstrap
  * @author Jess Green <jgreen@psy-dreamer.com>
  */
 class MangaPress_Bootstrap

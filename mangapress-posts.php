@@ -1,16 +1,9 @@
 <?php
 /**
- * @package MangaPress_Next
- * @version $Id$
- * @author Jessica Green <jgreen@psy-dreamer.com>
- */
-
-/**
- * MangaPress Posts class
  * Handles functionality for the Comic post-type
  *
- * @package MangaPress_Next
- * @subpackage MangaPress_Posts
+ * @package MangaPress_Next\MangaPress_Posts
+ * @version $Id$
  * @author Jessica Green <jgreen@psy-dreamer.com>
  */
 class MangaPress_Posts

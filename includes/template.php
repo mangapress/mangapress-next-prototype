@@ -1,12 +1,16 @@
 <?php
 /**
  * Template functions
- * @package MangaPress_Next
+ * @package MangaPress_Next\Templates
  */
 
 
 /**
  * Checks if the current post is a comic post
+ *
+ * @param int $post_id ID of the post being checked. Defaults to false
+ *
+ * @global \WP_Post $post Global WordPress post object. Used if no $post_id is passed
  *
  * @return bool
  */

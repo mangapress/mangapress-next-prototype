@@ -1,16 +1,12 @@
 <?php
 /**
- * MangaPress
+ * MangaPress_Options class. Controls registering, fields, and sanitizing routines for
+ * plugin options
  *
- * @package mangapress-options
+ * @package MangaPress_Next\MangaPress_Options
  * @author Jess Green <jgreen at psy-dreamer.com>
  * @version $Id$
  * @license GPL
- */
-/**
- * mangapress-options
- *
- * @author Jess Green <jgreen at psy-dreamer.com>
  */
 final class MangaPress_Options
 {

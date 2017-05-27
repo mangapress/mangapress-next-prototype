@@ -1,6 +1,7 @@
 <?php
 /**
  * WordPress Filters and Actions functions
+ * @package MangaPress_Next\Posts
  */
 namespace MangaPress\Posts;
 

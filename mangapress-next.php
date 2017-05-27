@@ -1,6 +1,6 @@
 <?php
 /**
- * @package Manga_Press_NEXT
+ * @package MangaPress_Next
  * @version $Id$
  * @author Jessica Green <jgreen@psy-dreamer.com>
  */
