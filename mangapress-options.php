@@ -36,10 +36,29 @@ final class MangaPress_Options
 
 
     /**
+     * Get default options
      * @return array
      */
     public static function get_default_options()
     {
         return self::$default_options;
+    }
+
+
+    /**
+     * MangaPress_Options constructor.
+     */
+    public function __construct()
+    {
+        add_action('admin_init', array('MangaPress_Options', 'admin_init'));
+    }
+
+
+    /**
+     * @
+     */
+    public static function admin_init()
+    {
+
     }
 }

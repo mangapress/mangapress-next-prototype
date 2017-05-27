@@ -11,5 +11,6 @@
         <ignore>tests/*</ignore>
         <ignore>output/*</ignore>
         <ignore>node_modules/*</ignore>
+        <ignore>examples/*</ignore>
     </files>
 </phpdoc>
