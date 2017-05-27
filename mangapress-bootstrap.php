@@ -42,6 +42,13 @@ class MangaPress_Bootstrap
 
 
     /**
+     * Admin helper object
+     *
+     * @var \MangaPress_Admin
+     */
+    protected $_admin_helper;
+
+    /**
      * Static function used to initialize Bootstrap
      *
      * @return void
@@ -87,6 +94,7 @@ class MangaPress_Bootstrap
     {
         $this->_posts_helper   = new MangaPress_Posts();
         $this->_options_helper = new MangaPress_Options();
+        $this->_options_helper = new MangaPress_Admin();
 
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
     }

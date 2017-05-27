@@ -54,6 +54,7 @@ if (!defined('MP_DOMAIN'))
 
 require_once MP_ABSPATH . 'includes/posts-functions.php';
 require_once MP_ABSPATH . 'includes/template.php';
+require_once MP_ABSPATH . 'mangapress-admin.php';
 require_once MP_ABSPATH . 'mangapress-options.php';
 require_once MP_ABSPATH . 'mangapress-posts.php';
 require_once MP_ABSPATH . 'mangapress-bootstrap.php';
