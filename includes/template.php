@@ -24,5 +24,9 @@ function mangapress_is_comic($post_id = false)
 
 function mangapress_nav()
 {
-
+    $next_post  = get_adjacent_post($group, $by_parent, 'mangapress_series', false, false);
+    $prev_post  = get_adjacent_post($group, $by_parent, 'mangapress_series', false, true);
+    $last_post  = get_boundary_post($group, $by_parent, 'mangapress_series', false, false);
+    $first_post = get_boundary_post($group, $by_parent, 'mangapress_series', false, true);
+    $current_page = $post->ID; // use post ID this time.
 }
