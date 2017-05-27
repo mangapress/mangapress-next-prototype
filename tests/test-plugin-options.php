@@ -16,4 +16,10 @@ class PluginOptionsTest extends WP_UnitTestCase
         $options = MangaPress_Options::options_fields();
         $this->assertEquals(is_array($options), true);
     }
+
+    public function testSectionsExist()
+    {
+        $sections = MangaPress_Options::options_sections();
+        $this->assertEquals(is_array($sections), true);
+    }
 }

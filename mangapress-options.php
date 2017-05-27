@@ -70,6 +70,9 @@ final class MangaPress_Options
          */
         $options = array(
             'basic' => array(
+                'title'       => __('Basic Options', MP_DOMAIN),
+                'description' => __('This section sets the &ldquo;Latest-&rdquo; and &ldquo;Comic Archive&rdquo; pages, number of comics per page, and grouping comics together by category.', MP_DOMAIN),
+
                 'group_comics'      => array(
                     'id'    => 'group-comics',
                     'type'  => 'checkbox',
@@ -112,6 +115,9 @@ final class MangaPress_Options
                 ),
             ),
             'comic_page' => array(
+                'title'       => __('Comic Page Options', MP_DOMAIN),
+                'description' => __('Handles image sizing options for comic pages. Thumbnail support may need to be enabled for some features to work properly. If page- or thumbnail sizes are changed, then a plugin such as Regenerate Thumbnails may be used to create the new thumbnails.', MP_DOMAIN),
+
                 'generate_comic_page' => array(
                     'id'    => 'generate-page',
                     'type'  => 'checkbox',
@@ -139,6 +145,9 @@ final class MangaPress_Options
                 ),
             ),
             'nav' => array(
+                'title'       => __('Navigation Options', MP_DOMAIN),
+                'description' => __('Options for comic navigation. Whether to have navigation automatically inserted on comic pages, or to enable/disable default comic navigation CSS.', MP_DOMAIN),
+
                 'nav_css'    => array(
                     'id'     => 'navigation-css',
                     'title'  => __('Navigation CSS', MP_DOMAIN),
@@ -158,7 +167,42 @@ final class MangaPress_Options
                 )
             ),
         );
+
+        /**
+         * mangapress_options_fields
+         * This filter modify Manga+Press' option fields
+         *
+         * @param array $options Manga+Press options array to be modified
+         * @return array
+         */
         return apply_filters('mangapress_options_fields', $options);
+    }
+
+
+    /**
+     * Helper function for setting default options sections.
+     *
+     * @return array
+     */
+    public static function options_sections()
+    {
+        $sections = [];
+        $options = self::options_fields();
+        foreach ($options as $section => $section_params) {
+            $sections[$section] = [
+                'title' => $section_params['title'],
+                'description' => $section_params['description'],
+            ];
+        }
+
+        /**
+         * mangapress_options_sections
+         * This filter modify Manga+Press' option sections
+         *
+         * @param array $sections Manga+Press sections array to be modified
+         * @return array
+         */
+        return apply_filters('mangapress_options_sections', $sections);
     }
 
 
