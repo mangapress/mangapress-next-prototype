@@ -25,13 +25,14 @@ function checkbox_field_cb($params)
 /**
  * Output text field
  * @param array $params Field parameters array
+ * @param string $class CSS class for styling purposes.
  */
-function text_field_cb($params)
+function text_field_cb($params, $class = 'regular-text')
 {
     $option_group = \MangaPress_Options::OPTIONS_GROUP_NAME;
     $description = output_description($params);
 
-    $field = "<input class='regular-text' type='text' id='{$params['id']}' name='{$option_group}[{$params['section']}][{$params['name']}]' />";
+    $field = "<input class='{$class}' type='text' id='{$params['id']}' name='{$option_group}[{$params['section']}][{$params['name']}]' />";
     echo $field . $description;
 }
 

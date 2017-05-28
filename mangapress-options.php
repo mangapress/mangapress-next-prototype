@@ -103,6 +103,9 @@ final class MangaPress_Options
     public static function section_output_cb($params)
     {
         $section_id = explode('-', $params['id'])[1];
+        $sections = self::options_sections();
+
+        echo "<p>{$sections[$section_id]['description']}</p>";
     }
 
 
@@ -150,7 +153,7 @@ final class MangaPress_Options
                         ),
                         'valid' => 'array',
                         'default'  => 0,
-                        'callback' => array(__CLASS__, 'ft_basic_page_dropdowns_cb'),
+                        'callback' => array(__CLASS__, 'basic_page_dropdowns_cb'),
                     ),
                     'comicarchive_page' => array(
                         'id'    => 'archive-page',
@@ -161,7 +164,7 @@ final class MangaPress_Options
                         ),
                         'valid' => 'array',
                         'default' => 0,
-                        'callback' => array(__CLASS__, 'ft_basic_page_dropdowns_cb'),
+                        'callback' => array(__CLASS__, 'basic_page_dropdowns_cb'),
                     ),
                 ]
             ),
@@ -203,7 +206,7 @@ final class MangaPress_Options
                     'nav_css'    => array(
                         'id'     => 'navigation-css',
                         'title'  => __('Navigation CSS', MP_DOMAIN),
-                        'description' => __('Turn this off. You know you want to!', MP_DOMAIN),
+                        'description' => __('Defaults to Custom CSS. Use Default CSS if you do not wish to create a child-theme.', MP_DOMAIN),
                         'type'   => 'select',
                         'value'  => array(
                             'custom_css' => __('Custom CSS', MP_DOMAIN),
@@ -216,7 +219,7 @@ final class MangaPress_Options
                     'display_css' => array(
                         'id'       => 'display',
                         'title'    => false,
-                        'callback' => array(__CLASS__, 'ft_navigation_css_display_cb'),
+                        'callback' => array(__CLASS__, 'navigation_css_display_cb'),
                     )
                 ],
             ),
@@ -275,15 +278,25 @@ final class MangaPress_Options
     }
 
 
-    public static function ft_navigation_css_display_cb()
+    public static function navigation_css_display_cb()
     {
 
     }
 
 
-    public static function ft_basic_page_dropdowns_cb()
+    public static function basic_page_dropdowns_cb($params)
     {
+        $description = \MangaPress\Fields\output_description($params);
+        $pages = get_posts(['post_type' => 'page', 'post_status' => 'publish']);
+        $select = "<select>\r\n";
+        $select .= "\t<option value='{" . key($params['value']) . "}'>{$params['value']['no_val']}</option>\r\n";
+        foreach ($pages as $page) {
+            // TODO sanitize post_name and post_title
+            $select .= "\t<option value='{$page->post_name}'>{$page->post_title}</option>\r\n";
+        }
+        $select .= "</select>\r\n";
 
+        echo $select . $description;
     }
 
 
