@@ -10,13 +10,17 @@ if ( ! current_user_can('manage_options') ){
         )
     );
 }
+$sections = array_keys(MangaPress_Options::options_sections());
 ?>
 <div class="wrap">
-    <h2><?php echo get_admin_page_title() ?></h2>
+    <h1><?php echo get_admin_page_title() ?></h1>
     <form action="options.php" method="post" id="mangapress_options_form">
         <?php settings_fields('mangapress_options'); ?>
-
-        <?php do_settings_sections('mangapress_options'); ?>
+        <?php
+            foreach ($sections as $section) {
+                do_settings_sections("mangapress_options-{$section}");
+            }
+        ?>
 
         <p>
             <?php submit_button(); ?>
