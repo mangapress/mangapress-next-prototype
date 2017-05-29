@@ -5,6 +5,9 @@
  */
 namespace MangaPress\Posts;
 
+define('MP_CATEGORY_PARENTS', 1);
+define('MP_CATEGORY_CHILDREN', 2);
+define('MP_CATEGORY_ALL', 3);
 
 
 /**
@@ -253,4 +256,87 @@ function comics_columns($columns)
     );
 
     return $columns;
+}
+
+
+/**
+ * Retrieve term IDs. Either child-cats or parent-cats.
+ *
+ * @global \wpdb $wpdb
+ * @param integer $object_ID Object ID
+ * @param mixed $taxonomy Taxonomy name or array of names
+ * @param integer $get Whether or not to get child-cats or top-level cats
+ *
+ * @return array
+ */
+function _get_object_terms($object_ID, $taxonomy, $get = MP_CATEGORY_PARENTS)
+{
+    global $wpdb;
+    if ($get == MP_CATEGORY_PARENTS) {
+        $parents = "AND tt.parent = 0";
+    } else if ($get == MP_CATEGORY_CHILDREN) {
+        $parents = "AND tt.parent != 0";
+    } else {
+        $parents = "";
+    }
+    $tax = (array) $taxonomy;
+    $taxonomies = "'" . implode("', '", $tax) . "'";
+    $query = "SELECT t.term_id FROM {$wpdb->terms} AS t "
+        . "INNER JOIN {$wpdb->term_taxonomy} AS tt ON tt.term_id = t.term_id "
+        . "INNER JOIN {$wpdb->term_relationships} AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id "
+        . "WHERE tt.taxonomy IN ({$taxonomies}) "
+        . "AND tr.object_id IN ({$object_ID}) "
+        . "{$parents} ORDER BY t.term_id ASC";
+    return $wpdb->get_col($query);
+}
+
+
+/**
+ * Clone of WordPress function get_boundary_post(). Retrieves first and last
+ * comic posts.
+ *
+ * @param bool $in_same_term Optional. Whether returned post should be in same category.
+ * @param bool $group_by_parent Optional. Whether returned post should be in the same parent category.
+ * @param bool $start Optional. Whether to retrieve first or last post.
+ * @param string $taxonomy Optional. Which taxonomy to pull from.
+ *
+ * @return \WP_Post|false Return a WP_Post object on success, false if no posts are found
+ */
+function get_boundary_post($in_same_term = false, $group_by_parent = false, $start = true, $taxonomy = 'category')
+{
+    $post = get_post();
+    if (!is_single($post) || !mangapress_is_comic($post)) {
+        return null;
+    }
+
+    $query_args = array(
+        'post_type' => get_post_type($post),
+        'posts_per_page' => 1,
+        'order' => $start ? 'ASC' : 'DESC',
+        'update_post_term_cache' => false,
+        'update_post_meta_cache' => false
+    );
+
+    $term_array = array();
+
+    if ($in_same_term) {
+        if (!$group_by_parent) {
+            $term_array = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
+        } else {
+            $term_array = _get_object_terms($post->ID, $taxonomy);
+        }
+
+        $query_args['tax_query'] = [
+            [
+                'taxonomy' => $taxonomy,
+                'terms' => $term_array
+            ]
+        ];
+    }
+    $start_post = get_posts($query_args);
+    if (isset($start_post[0])) {
+        return $start_post[0];
+    }
+
+    return false;
 }
