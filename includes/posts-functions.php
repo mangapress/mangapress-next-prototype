@@ -306,13 +306,14 @@ function get_boundary_post($in_same_term = false, $group_by_parent = false, $sta
 {
     $post = get_post();
     if (!is_single($post) || !mangapress_is_comic($post)) {
-        return null;
+        return false;
     }
 
     $query_args = array(
         'post_type' => get_post_type($post),
         'posts_per_page' => 1,
-        'order' => $start ? 'ASC' : 'DESC',
+        'orderby' => 'post_date', // TODO Make this configurable
+        'order' => $start ? 'DESC' : 'ASC',
         'update_post_term_cache' => false,
         'update_post_meta_cache' => false
     );
@@ -336,6 +337,55 @@ function get_boundary_post($in_same_term = false, $group_by_parent = false, $sta
     $start_post = get_posts($query_args);
     if (isset($start_post[0])) {
         return $start_post[0];
+    }
+
+    return false;
+}
+
+
+/**
+ * Handles looking for previous and next comics.
+ *
+ * @TODO Work in $in_same_term and $group_by_parent parameters
+ *
+ * @param bool $in_same_term Optional. Whether returned post should be in same category.
+ * @param bool $group_by_parent Optional. Whether to limit to category parent
+ * @param bool $previous Optional. Whether to retrieve next or previous post.
+ * @param string $taxonomy Optional. Which taxonomy to pull from.
+ *
+ * @return \WP_Post|false Return WP_Post object if successful, false if not
+ */
+function get_adjacent_post($in_same_term = false, $group_by_parent = false, $previous = true, $taxonomy = 'category')
+{
+    $post = get_post();
+    if (!is_single($post) || !mangapress_is_comic($post)) {
+        return false;
+    }
+
+    $current_post_date = $post->post_date;
+
+    $order = $previous ? 'DESC' : 'ASC';
+    $date_order = $previous ? 'before' : 'after';
+
+    $args = [
+        'post_type' => get_post_type($post),
+        'post_status' => 'publish',
+        'posts_per_page' => 1,
+        'order' => $order,
+        'orderby' => 'post_date',
+        'update_post_term_cache' => false,
+        'update_post_meta_cache' => false,
+        'date_query' => [
+            [
+                'column' => 'post_date',
+                $date_order => $current_post_date,
+            ],
+        ],
+    ];
+    $query = new \WP_Query($args);
+
+    if (isset($query->post)) {
+        return $query->post;
     }
 
     return false;
