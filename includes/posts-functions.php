@@ -295,6 +295,8 @@ function _get_object_terms($object_ID, $taxonomy, $get = MP_CATEGORY_PARENTS)
  * Clone of WordPress function get_boundary_post(). Retrieves first and last
  * comic posts.
  *
+ * @TODO Work in $in_same_term and $group_by_parent parameters
+ *
  * @param bool $in_same_term Optional. Whether returned post should be in same category.
  * @param bool $group_by_parent Optional. Whether returned post should be in the same parent category.
  * @param bool $start Optional. Whether to retrieve first or last post.
@@ -382,6 +384,22 @@ function get_adjacent_post($in_same_term = false, $group_by_parent = false, $pre
             ],
         ],
     ];
+
+    if ($in_same_term) {
+        if (!$group_by_parent) {
+            $term_array = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
+        } else {
+            $term_array = _get_object_terms($post->ID, $taxonomy);
+        }
+
+        $args['tax_query'] = [
+            [
+                'taxonomy' => $taxonomy,
+                'terms' => $term_array
+            ]
+        ];
+    }
+
     $query = new \WP_Query($args);
 
     if (isset($query->post)) {

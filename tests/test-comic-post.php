@@ -10,8 +10,6 @@
  */
 class ComicPostTest extends WP_UnitTestCase
 {
-
-
     /**
      * @var \MangaPress_Install
      */
@@ -81,7 +79,7 @@ class ComicPostTest extends WP_UnitTestCase
 
 
     /**
-     *
+     * Test comic navigation — no terms assigned
      */
     public function test_comic_navigation()
     {
@@ -125,6 +123,90 @@ class ComicPostTest extends WP_UnitTestCase
         $last = MangaPress\Posts\get_boundary_post(false, false, false, MangaPress_Posts::TAX_SERIES);
         $next = MangaPress\Posts\get_adjacent_post(false, false, false, MangaPress_Posts::TAX_SERIES);
         $prev = MangaPress\Posts\get_adjacent_post(false, false, true, MangaPress_Posts::TAX_SERIES);
+
+        $comic_index = array_search($post->post_title, array_column($comics, 'post_title'));
+
+        $this->assertInstanceOf(WP_Post::class, $start, "Instance returned should be of WP_Post");
+        $this->assertInstanceOf(WP_Post::class, $last, "Instance returned should be of WP_Post");
+        $this->assertInstanceOf(WP_Post::class, $next, "Instance returned should be of WP_Post");
+        $this->assertInstanceOf(WP_Post::class, $prev, "Instance returned should be of WP_Post");
+
+        $this->assertEquals($comics[count($comics) - 1], $start, "get_boundary_post should match the first element returned by get_posts");
+        $this->assertEquals($comics[0], $last, "get_boundary_post should match the last element returned by get_posts");
+
+        $this->assertEquals($comics[$comic_index], $post);
+        $this->assertEquals($comics[$comic_index - 1], $prev, "get_adjacent_post should match the element previous to the current element");
+        $this->assertEquals($comics[$comic_index + 1], $next, "get_adjacent_post should match the element after the current element");
+    }
+
+
+    public function test_comic_navigation_with_taxonomy()
+    {
+        $results = $this->factory()->term->create_many(5, ['taxonomy' => MangaPress_Posts::TAX_SERIES]);
+        for ($c = -16; $c < -8; $c++) {
+            $this->factory()->post->create(
+                [
+                    'post_author' => get_current_user_id(),
+                    'post_type' => MangaPress_Posts::POST_TYPE,
+                    'post_date' => date('Y-m-d H:i:s', strtotime("{$c} days")),
+                    'post_date_modified'  => date('Y-m-d H:i:s', strtotime("{$c} days")),
+                    'post_date_gmt' => date('Y-m-d H:i:s', strtotime("{$c} days")),
+                    'post_date_modified_gmt'  => date('Y-m-d H:i:s', strtotime("{$c} days")),
+                    'tax_input' => [
+                        MangaPress_Posts::TAX_SERIES => $results[0]
+                    ]
+                ]
+            );
+        }
+
+        for ($c = -8; $c < 1; $c++) {
+            $this->factory()->post->create(
+                [
+                    'post_author' => get_current_user_id(),
+                    'post_type' => MangaPress_Posts::POST_TYPE,
+                    'post_date' => date('Y-m-d H:i:s', strtotime("{$c} days")),
+                    'post_date_modified'  => date('Y-m-d H:i:s', strtotime("{$c} days")),
+                    'post_date_gmt' => date('Y-m-d H:i:s', strtotime("{$c} days")),
+                    'post_date_modified_gmt'  => date('Y-m-d H:i:s', strtotime("{$c} days")),
+                    'tax_input' => [
+                        MangaPress_Posts::TAX_SERIES => $results[3]
+                    ]
+                ]
+            );
+        }
+
+        $comics = array_reverse(get_posts([
+            'post_type' => MangaPress_Posts::POST_TYPE,
+            'post_status' => 'publish',
+            'orderby' => 'post_date',
+            'posts_per_page' => -1,
+            'tax_query' => [
+                'relation' => 'OR',
+                [
+                    'taxonomy' => MangaPress_Posts::TAX_SERIES,
+                    'field' => 'term_id',
+                    'terms' => [$results[0]]
+                ]
+            ]
+        ]));
+
+        $post_id = $comics[ intval( count($comics) / 2) ]->ID;
+        global $wp_query, $post;
+        $wp_query = new WP_Query([
+            'p' => $post_id,
+            'post_type' => MangaPress_Posts::POST_TYPE,
+        ]);
+
+        $post = $wp_query->get_queried_object();
+        setup_postdata($post);
+        $this->assertEquals(is_single(), true);
+        $this->assertEquals(get_post() instanceof WP_Post, true);
+        $this->assertEquals(taxonomy_exists(MangaPress_Posts::TAX_SERIES), true);
+
+        $start = MangaPress\Posts\get_boundary_post(true, false, true, MangaPress_Posts::TAX_SERIES);
+        $last = MangaPress\Posts\get_boundary_post(true, false, false, MangaPress_Posts::TAX_SERIES);
+        $next = MangaPress\Posts\get_adjacent_post(true, false, false, MangaPress_Posts::TAX_SERIES);
+        $prev = MangaPress\Posts\get_adjacent_post(true, false, true, MangaPress_Posts::TAX_SERIES);
 
         $comic_index = array_search($post->post_title, array_column($comics, 'post_title'));
 
