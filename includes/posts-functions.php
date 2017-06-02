@@ -332,10 +332,12 @@ function get_boundary_post($in_same_term = false, $group_by_parent = false, $sta
         $query_args['tax_query'] = [
             [
                 'taxonomy' => $taxonomy,
-                'terms' => $term_array
+                'terms' => $term_array,
+                'include_children' => !$group_by_parent,
             ]
         ];
     }
+
     $start_post = get_posts($query_args);
     if (isset($start_post[0])) {
         return $start_post[0];
