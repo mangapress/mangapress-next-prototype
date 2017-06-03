@@ -397,7 +397,8 @@ function get_adjacent_post($in_same_term = false, $group_by_parent = false, $pre
         $args['tax_query'] = [
             [
                 'taxonomy' => $taxonomy,
-                'terms' => $term_array
+                'terms' => $term_array,
+                'include_children' => !$group_by_parent,
             ]
         ];
     }

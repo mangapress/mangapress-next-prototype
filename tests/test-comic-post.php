@@ -288,7 +288,7 @@ class ComicPostTest extends WP_UnitTestCase
             );
         }
 
-        $comics = array_reverse(get_posts([
+        $comics_term_1 = array_reverse(get_posts([
             'post_type' => MangaPress_Posts::POST_TYPE,
             'post_status' => 'publish',
             'orderby' => 'post_date',
@@ -302,8 +302,40 @@ class ComicPostTest extends WP_UnitTestCase
                 ]
             ]
         ]));
+        $comics_term_2 = array_reverse(get_posts([
+            'post_type' => MangaPress_Posts::POST_TYPE,
+            'post_status' => 'publish',
+            'orderby' => 'post_date',
+            'posts_per_page' => -1,
+            'tax_query' => [
+                'relation' => 'AND',
+                [
+                    'taxonomy' => MangaPress_Posts::TAX_SERIES,
+                    'field' => 'term_id',
+                    'terms' => [$child_term_2]
+                ]
+            ]
+        ]));
+        $comics_parent_term = array_reverse(get_posts([
+            'post_type' => MangaPress_Posts::POST_TYPE,
+            'post_status' => 'publish',
+            'orderby' => 'post_date',
+            'posts_per_page' => -1,
+            'tax_query' => [
+                'relation' => 'AND',
+                [
+                    'taxonomy' => MangaPress_Posts::TAX_SERIES,
+                    'field' => 'term_id',
+                    'terms' => [$parent_results[0]]
+                ]
+            ]
+        ]));
 
-        $this->assertEquals(count($comics), 8);
+        $this->assertEquals(count($comics_term_1), 8);
+        $this->assertEquals(count($comics_term_2), 9);
+        $this->assertEquals(count($comics_parent_term), 17);
+        $comics = $comics_parent_term;
+
         $post_id = $comics[ intval( count($comics) / 2) ]->ID;
         global $wp_query, $post;
         $wp_query = new WP_Query([
