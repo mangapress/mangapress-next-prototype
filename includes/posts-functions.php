@@ -295,8 +295,6 @@ function _get_object_terms($object_ID, $taxonomy, $get = MP_CATEGORY_PARENTS)
  * Clone of WordPress function get_boundary_post(). Retrieves first and last
  * comic posts.
  *
- * @TODO Work in $in_same_term and $group_by_parent parameters
- *
  * @param bool $in_same_term Optional. Whether returned post should be in same category.
  * @param bool $group_by_parent Optional. Whether returned post should be in the same parent category.
  * @param bool $start Optional. Whether to retrieve first or last post.
@@ -349,8 +347,6 @@ function get_boundary_post($in_same_term = false, $group_by_parent = false, $sta
 
 /**
  * Handles looking for previous and next comics.
- *
- * @TODO Work in $in_same_term and $group_by_parent parameters
  *
  * @param bool $in_same_term Optional. Whether returned post should be in same category.
  * @param bool $group_by_parent Optional. Whether to limit to category parent
@@ -410,4 +406,84 @@ function get_adjacent_post($in_same_term = false, $group_by_parent = false, $pre
     }
 
     return false;
+}
+
+
+/**
+ * Get adjacent and boundary posts as an array. Pass through mangapress_navigation_links filter to allow
+ * modification of array by 3rd party plugins and themes
+ *
+ * @param \WP_Post $post
+ *
+ * @return array
+ */
+function get_adjacent_and_boundary_posts(\WP_Post $post)
+{
+    global $post;
+
+    // TODO add retrieval for plugin options
+    $group = false;
+    $by_parent = false;
+
+    $next  = get_adjacent_post($group, $by_parent, false, 'mangapress_series');
+    $prev  = get_adjacent_post($group, $by_parent, true,'mangapress_series');
+    $last  = get_boundary_post($group, $by_parent, false,'mangapress_series');
+    $first = get_boundary_post($group, $by_parent, true,'mangapress_series');
+
+    $first_url = get_comic_page_url($first, $post);
+    $last_url  = get_comic_page_url($last, $post);
+    $next_url  = get_comic_page_url($next, $post);
+    $prev_url  = get_comic_page_url($prev, $post);
+
+    $navigation_links = [
+        'first' => [
+            'label' => __('First', MP_DOMAIN),
+            'url' => $first_url,
+            'post' => $first,
+        ],
+        'previous' => [
+            'label' => __('Previous', MP_DOMAIN),
+            'url' => $prev_url,
+            'post' => $prev,
+        ],
+        'next' => [
+            'label' => __('Next', MP_DOMAIN),
+            'url' => $next_url,
+            'post' => $next,
+        ],
+        'last' => [
+            'label' => __('Last', MP_DOMAIN),
+            'url' => $last_url,
+            'last' => $last,
+        ]
+    ];
+
+
+    /**
+     * mangapress_navigation_links
+     * Use this filter to modify the $navigation_links array.
+     *
+     * @param array $navigation_links
+     * @return array
+     */
+    return apply_filters('mangapress_navigation_links', $navigation_links);
+}
+
+
+/**
+ * Get the permalink url of the comic post ($post). If $post is false, then
+ * use the current page ($current_page).
+ * @link https://developer.wordpress.org/reference/functions/get_permalink/ see \get_permalink()
+ *
+ * @param \WP_Post $post
+ * @param \WP_Post $current_page
+ * @return string|false Return the url if successful, otherwise false
+ */
+function get_comic_page_url($post, $current_page)
+{
+    if (!isset($post->ID)) {
+        return get_permalink($current_page->ID);
+    }
+
+    return get_permalink($post->ID);
 }

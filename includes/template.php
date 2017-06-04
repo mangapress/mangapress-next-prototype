@@ -1,9 +1,11 @@
 <?php
 /**
- * Template functions
+ * Template functions. These functions live in the global namespace to maintain
+ * continuity with WordPress template function naming standards.
+ *
  * @package MangaPress_Next\Templates
  */
-
+use MangaPress\Posts as Posts;
 
 /**
  * Checks if the current post is a comic post
@@ -14,7 +16,7 @@
  *
  * @return bool
  */
-function mangapress_is_comic($post_id = false)
+function mangapress_is_comic($post_id = 0)
 {
     if (!$post_id) {
         global $post;
@@ -27,7 +29,7 @@ function mangapress_is_comic($post_id = false)
 
 
 /**
- * Displays navigation for post specified by $post_id.
+ * Get navigation for current post object.
  *
  * @global \WP_Post $post
  *
@@ -35,12 +37,10 @@ function mangapress_is_comic($post_id = false)
  *
  * @return string Returns navigation string if $echo is set to false.
  */
-function mangapress_comic_navigation($args = array())
+function mangapress_get_comic_navigation($args = [])
 {
     global $post;
 
-    // TODO add retrieval for plugin options
-    $group = false;
     $defaults = array(
         'container'      => 'nav',
         'container_attr' => array(
@@ -56,13 +56,60 @@ function mangapress_comic_navigation($args = array())
     $parsed_args = wp_parse_args($args, $defaults);
     $args = (object) $parsed_args;
 
-    $next_post  = get_adjacent_post($group, false, false, 'mangapress_series');
-    $prev_post  = get_adjacent_post($group, false, true,'mangapress_series');
-    $last_post  = get_boundary_post($group, false, false,'mangapress_series');
-    $first_post = get_boundary_post($group, false, true,'mangapress_series');
-    $current_page = $post->ID; // use post ID this time.
+    $navigation_links = Posts\get_adjacent_and_boundary_posts($post);
+    $comic_nav = "";
+    $show_container = false;
+    if ( $args->container ) {
+        $show_container = true;
+        $attr           = "";
+        if (!empty($args->container_attr)) {
+            $attr_arr = [];
+            foreach ($args->container_attr as $name => $value) {
+                $attr_arr[] = "{$name}=\"" . esc_attr($value) . "\"";
+            }
+            $attr = " " . implode(" ", $attr_arr);
+        }
+        $comic_nav .= "<{$args->container}$attr>";
+    }
 
-    return '';
+    $items_wrap_attr = "";
+    if (!empty($args->items_wrap_attr)) {
+        $items_attr_arr = [];
+        foreach ($args->items_wrap_attr as $name => $value) {
+            $items_attr_arr[] = "{$name}=\"" . esc_attr($value) . "\"";
+        }
+        $items_wrap_attr = " " . implode(" ", $items_attr_arr);
+    }
+
+    $items = [];
+    foreach ($navigation_links as $label => $link) {
+        $items[] = "<{$args->link_wrap} class=\"link-{$label}\">\r\n"
+                . ( (isset($link['post']->ID) && $link['post']->ID == $post->ID)
+                    ? "\t<span class=\"comic-nav-span\">{$link['label']}</span>\r\n"
+                    : "\t<a href=\"{$link['url']}\">{$link['label']}</a>\r\n")
+                . "</{$args->link_wrap}>\r\n";
+    }
+
+    $items_str = implode(" ", apply_filters( 'mangapress_comic_navigation_items', $items, $args ));
+    $comic_nav .= sprintf( $args->items_wrap, $items_wrap_attr, $items_str );
+    if ($show_container){
+        $comic_nav .= "</{$args->container}>";
+    }
+
+    return $comic_nav;
+}
+
+
+/**
+ * Display navigation for current post object.
+ *
+ * @global \WP_Post $post
+ *
+ * @param array $args Arguments for navigation output
+ */
+function mangapress_comic_navigation($args = [])
+{
+    echo mangapress_get_comic_navigation($args);
 }
 
 /**
