@@ -309,16 +309,16 @@ function get_boundary_post($in_same_term = false, $group_by_parent = false, $sta
         return false;
     }
 
-    $query_args = array(
+    $query_args = [
         'post_type' => get_post_type($post),
         'posts_per_page' => 1,
         'orderby' => 'post_date', // TODO Make this configurable
-        'order' => $start ? 'DESC' : 'ASC',
+        'order' => $start ? 'ASC' : 'DESC',
         'update_post_term_cache' => false,
         'update_post_meta_cache' => false
-    );
+    ];
 
-    $term_array = array();
+    $term_array = [];
 
     if ($in_same_term) {
         if (!$group_by_parent) {
@@ -337,7 +337,7 @@ function get_boundary_post($in_same_term = false, $group_by_parent = false, $sta
     }
 
     $start_post = get_posts($query_args);
-    if (isset($start_post[0])) {
+    if (isset($start_post[0]->ID) && $start_post[0]->ID !== $post->ID) {
         return $start_post[0];
     }
 
@@ -385,7 +385,7 @@ function get_adjacent_post($in_same_term = false, $group_by_parent = false, $pre
 
     if ($in_same_term) {
         if (!$group_by_parent) {
-            $term_array = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
+            $term_array = wp_get_object_terms($post->ID, $taxonomy, array( 'fields' => 'ids' ) );
         } else {
             $term_array = _get_object_terms($post->ID, $taxonomy);
         }
@@ -399,10 +399,10 @@ function get_adjacent_post($in_same_term = false, $group_by_parent = false, $pre
         ];
     }
 
-    $query = new \WP_Query($args);
+    $query = get_posts($args);
 
-    if (isset($query->post)) {
-        return $query->post;
+    if (!empty($query)) {
+        return $query[0];
     }
 
     return false;
