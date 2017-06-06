@@ -81,7 +81,7 @@ class ComicPostTest extends WP_UnitTestCase
     /**
      * Test comic navigation — default term assigned
      */
-    public function test_comic_navigation_start()
+    public function test_comic_navigation_boundary()
     {
         for ($c = -16; $c < 1; $c++) {
             $this->factory()->post->create(
@@ -209,8 +209,8 @@ class ComicPostTest extends WP_UnitTestCase
         $this->assertInstanceOf(WP_Post::class, $next, "Instance returned should be of WP_Post");
         $this->assertInstanceOf(WP_Post::class, $prev, "Instance returned should be of WP_Post");
 
-        $this->assertEquals($comics[count($comics) - 1], $start, "get_boundary_post should match the first element returned by get_posts");
-        $this->assertEquals($comics[0], $last, "get_boundary_post should match the last element returned by get_posts");
+        $this->assertEquals($comics[0], $start, "get_boundary_post should match the first element returned by get_posts");
+        $this->assertEquals($comics[count($comics) - 1], $last, "get_boundary_post should match the last element returned by get_posts");
 
         $this->assertEquals($comics[$comic_index], $post);
         $this->assertEquals($comics[$comic_index - 1], $prev, "get_adjacent_post should match the element previous to the current element");
@@ -354,8 +354,8 @@ class ComicPostTest extends WP_UnitTestCase
         $this->assertInstanceOf(WP_Post::class, $next, "Instance returned should be of WP_Post");
         $this->assertInstanceOf(WP_Post::class, $prev, "Instance returned should be of WP_Post");
 
-        $this->assertEquals($comics[count($comics) - 1], $start, "get_boundary_post should match the first element returned by get_posts");
-        $this->assertEquals($comics[0], $last, "get_boundary_post should match the last element returned by get_posts");
+        $this->assertEquals($comics[0], $start, "get_boundary_post should match the first element returned by get_posts");
+        $this->assertEquals($comics[count($comics) - 1], $last, "get_boundary_post should match the last element returned by get_posts");
 
         $this->assertEquals($comics[$comic_index], $post);
         $this->assertEquals($comics[$comic_index - 1], $prev, "get_adjacent_post should match the element previous to the current element");

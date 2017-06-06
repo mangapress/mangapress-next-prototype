@@ -336,9 +336,10 @@ function get_boundary_post($in_same_term = false, $group_by_parent = false, $sta
         ];
     }
 
-    $start_post = get_posts($query_args);
-    if (isset($start_post[0]->ID) && $start_post[0]->ID !== $post->ID) {
-        return $start_post[0];
+    $query = get_posts($query_args);
+
+    if (isset($query[0]->ID) && $query[0]->ID !== $post->ID) {
+        return $query[0];
     }
 
     return false;
@@ -454,7 +455,7 @@ function get_adjacent_and_boundary_posts(\WP_Post $post)
         'last' => [
             'label' => __('Last', MP_DOMAIN),
             'url' => $last_url,
-            'last' => $last,
+            'post' => $last,
         ]
     ];
 
@@ -469,6 +470,22 @@ function get_adjacent_and_boundary_posts(\WP_Post $post)
     return apply_filters('mangapress_navigation_links', $navigation_links);
 }
 
+
+/**
+ * Check if the post is the current post in comic navigation
+ *
+ * @param \WP_Post $post
+ * @param \WP_Post $current
+ * @return boolean
+ */
+function is_current_post($post, $current)
+{
+    if (!is_a($post, \WP_Post::class)) {
+        return true;
+    }
+
+    return $post->ID === $current->ID;
+}
 
 /**
  * Get the permalink url of the comic post ($post). If $post is false, then

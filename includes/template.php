@@ -84,9 +84,10 @@ function mangapress_get_comic_navigation($args = [])
     $items = [];
     foreach ($navigation_links as $label => $link) {
         $items[] = "<{$args->link_wrap} class=\"link-{$label}\">\r\n"
-                . ( (isset($link['post']->ID) && $link['post']->ID == $post->ID)
-                    ? "\t<span class=\"comic-nav-span\">{$link['label']}</span>\r\n"
-                    : "\t<a href=\"{$link['url']}\">{$link['label']}</a>\r\n")
+                . ( !Posts\is_current_post($link['post'], $post)
+                    ? "\t<a href=\"{$link['url']}\">{$link['label']}</a>\r\n"
+                    : "\t<span class=\"comic-nav-span\">{$link['label']}</span>\r\n"
+                )
                 . "</{$args->link_wrap}>\r\n";
     }
 
