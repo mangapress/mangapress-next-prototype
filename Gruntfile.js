@@ -49,11 +49,14 @@ module.exports = function (grunt) {
                             '!**/.{svn,git}/**', // Ignore version control directories.
                             '!build/**',
                             '!bin/**',
+                            '!docs/**',
+                            '!examples/**',
                             '!node_modules/**',
                             '!tests/**',
                             '!Gruntfile.js',
                             '!package.json',
-                            '!phpunit.xml.dist'
+                            '!phpunit.xml.dist',
+                            '!phpdoc.xml'
                         ],
                         dest: BUILD_DIR + '/<%= pkg.version %>/mangapress-next/'
                     }

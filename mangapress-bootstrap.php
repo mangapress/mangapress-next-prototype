@@ -2,8 +2,7 @@
 /**
  * Plugin bootstrap class.
  *
- * @package MangaPress
- * @subpackage MangaPress_Bootstrap
+ * @package MangaPress_Next\MangaPress_Bootstrap
  * @author Jess Green <jgreen@psy-dreamer.com>
  */
 class MangaPress_Bootstrap
@@ -41,6 +40,13 @@ class MangaPress_Bootstrap
      */
     protected $_options_helper;
 
+
+    /**
+     * Admin helper object
+     *
+     * @var \MangaPress_Admin
+     */
+    protected $_admin_helper;
 
     /**
      * Static function used to initialize Bootstrap
@@ -88,6 +94,7 @@ class MangaPress_Bootstrap
     {
         $this->_posts_helper   = new MangaPress_Posts();
         $this->_options_helper = new MangaPress_Options();
+        $this->_options_helper = new MangaPress_Admin();
 
         add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
     }

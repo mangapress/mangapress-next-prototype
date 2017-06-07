@@ -23,7 +23,7 @@ Manga+Press is a webcomic managment system for WordPress. Manga+Press uses WordP
    * Ground-up rebuild of Manga+Press core. Includes unit tests.
 
 ### System Requirements
-   * PHP 5.3 or newer    
+   * PHP 7 or newer    
 
 ### Installation
 

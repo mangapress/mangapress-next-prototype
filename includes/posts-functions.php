@@ -1,9 +1,13 @@
 <?php
 /**
  * WordPress Filters and Actions functions
+ * @package MangaPress_Next\Posts
  */
 namespace MangaPress\Posts;
 
+define('MP_CATEGORY_PARENTS', 1);
+define('MP_CATEGORY_CHILDREN', 2);
+define('MP_CATEGORY_ALL', 3);
 
 
 /**
@@ -252,4 +256,251 @@ function comics_columns($columns)
     );
 
     return $columns;
+}
+
+
+/**
+ * Retrieve term IDs. Either child-cats or parent-cats.
+ *
+ * @global \wpdb $wpdb
+ * @param integer $object_ID Object ID
+ * @param mixed $taxonomy Taxonomy name or array of names
+ * @param integer $get Whether or not to get child-cats or top-level cats
+ *
+ * @return array
+ */
+function _get_object_terms($object_ID, $taxonomy, $get = MP_CATEGORY_PARENTS)
+{
+    global $wpdb;
+    if ($get == MP_CATEGORY_PARENTS) {
+        $parents = "AND tt.parent = 0";
+    } else if ($get == MP_CATEGORY_CHILDREN) {
+        $parents = "AND tt.parent != 0";
+    } else {
+        $parents = "";
+    }
+    $tax = (array) $taxonomy;
+    $taxonomies = "'" . implode("', '", $tax) . "'";
+    $query = "SELECT t.term_id FROM {$wpdb->terms} AS t "
+        . "INNER JOIN {$wpdb->term_taxonomy} AS tt ON tt.term_id = t.term_id "
+        . "INNER JOIN {$wpdb->term_relationships} AS tr ON tr.term_taxonomy_id = tt.term_taxonomy_id "
+        . "WHERE tt.taxonomy IN ({$taxonomies}) "
+        . "AND tr.object_id IN ({$object_ID}) "
+        . "{$parents} ORDER BY t.term_id ASC";
+    return $wpdb->get_col($query);
+}
+
+
+/**
+ * Clone of WordPress function get_boundary_post(). Retrieves first and last
+ * comic posts.
+ *
+ * @param bool $in_same_term Optional. Whether returned post should be in same category.
+ * @param bool $group_by_parent Optional. Whether returned post should be in the same parent category.
+ * @param bool $start Optional. Whether to retrieve first or last post.
+ * @param string $taxonomy Optional. Which taxonomy to pull from.
+ *
+ * @return \WP_Post|false Return a WP_Post object on success, false if no posts are found
+ */
+function get_boundary_post($in_same_term = false, $group_by_parent = false, $start = true, $taxonomy = 'category')
+{
+    $post = get_post();
+    if (!is_single($post) || !mangapress_is_comic($post)) {
+        return false;
+    }
+
+    $query_args = [
+        'post_type' => get_post_type($post),
+        'posts_per_page' => 1,
+        'orderby' => 'post_date', // TODO Make this configurable
+        'order' => $start ? 'ASC' : 'DESC',
+        'update_post_term_cache' => false,
+        'update_post_meta_cache' => false
+    ];
+
+    $term_array = [];
+
+    if ($in_same_term) {
+        if (!$group_by_parent) {
+            $term_array = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
+        } else {
+            $term_array = _get_object_terms($post->ID, $taxonomy);
+        }
+
+        $query_args['tax_query'] = [
+            [
+                'taxonomy' => $taxonomy,
+                'terms' => $term_array,
+                'include_children' => !$group_by_parent,
+            ]
+        ];
+    }
+
+    $query = get_posts($query_args);
+
+    if (isset($query[0]->ID) && $query[0]->ID !== $post->ID) {
+        return $query[0];
+    }
+
+    return false;
+}
+
+
+/**
+ * Handles looking for previous and next comics.
+ *
+ * @param bool $in_same_term Optional. Whether returned post should be in same category.
+ * @param bool $group_by_parent Optional. Whether to limit to category parent
+ * @param bool $previous Optional. Whether to retrieve next or previous post.
+ * @param string $taxonomy Optional. Which taxonomy to pull from.
+ *
+ * @return \WP_Post|false Return WP_Post object if successful, false if not
+ */
+function get_adjacent_post($in_same_term = false, $group_by_parent = false, $previous = true, $taxonomy = 'category')
+{
+    $post = get_post();
+    if (!is_single($post) || !mangapress_is_comic($post)) {
+        return false;
+    }
+
+    $current_post_date = $post->post_date;
+
+    $order = $previous ? 'DESC' : 'ASC';
+    $date_order = $previous ? 'before' : 'after';
+
+    $args = [
+        'post_type' => get_post_type($post),
+        'post_status' => 'publish',
+        'posts_per_page' => 1,
+        'order' => $order,
+        'orderby' => 'post_date',
+        'update_post_term_cache' => false,
+        'update_post_meta_cache' => false,
+        'date_query' => [
+            [
+                'column' => 'post_date',
+                $date_order => $current_post_date,
+            ],
+        ],
+    ];
+
+    if ($in_same_term) {
+        if (!$group_by_parent) {
+            $term_array = wp_get_object_terms($post->ID, $taxonomy, array( 'fields' => 'ids' ) );
+        } else {
+            $term_array = _get_object_terms($post->ID, $taxonomy);
+        }
+
+        $args['tax_query'] = [
+            [
+                'taxonomy' => $taxonomy,
+                'terms' => $term_array,
+                'include_children' => !$group_by_parent,
+            ]
+        ];
+    }
+
+    $query = get_posts($args);
+
+    if (!empty($query)) {
+        return $query[0];
+    }
+
+    return false;
+}
+
+
+/**
+ * Get adjacent and boundary posts as an array. Pass through mangapress_navigation_links filter to allow
+ * modification of array by 3rd party plugins and themes
+ *
+ * @param \WP_Post $post
+ *
+ * @return array
+ */
+function get_adjacent_and_boundary_posts(\WP_Post $post)
+{
+    global $post;
+
+    // TODO add retrieval for plugin options
+    $group = false;
+    $by_parent = false;
+
+    $next  = get_adjacent_post($group, $by_parent, false, 'mangapress_series');
+    $prev  = get_adjacent_post($group, $by_parent, true,'mangapress_series');
+    $last  = get_boundary_post($group, $by_parent, false,'mangapress_series');
+    $first = get_boundary_post($group, $by_parent, true,'mangapress_series');
+
+    $first_url = get_comic_page_url($first, $post);
+    $last_url  = get_comic_page_url($last, $post);
+    $next_url  = get_comic_page_url($next, $post);
+    $prev_url  = get_comic_page_url($prev, $post);
+
+    $navigation_links = [
+        'first' => [
+            'label' => __('First', MP_DOMAIN),
+            'url' => $first_url,
+            'post' => $first,
+        ],
+        'previous' => [
+            'label' => __('Previous', MP_DOMAIN),
+            'url' => $prev_url,
+            'post' => $prev,
+        ],
+        'next' => [
+            'label' => __('Next', MP_DOMAIN),
+            'url' => $next_url,
+            'post' => $next,
+        ],
+        'last' => [
+            'label' => __('Last', MP_DOMAIN),
+            'url' => $last_url,
+            'post' => $last,
+        ]
+    ];
+
+
+    /**
+     * mangapress_navigation_links
+     * Use this filter to modify the $navigation_links array.
+     *
+     * @param array $navigation_links
+     * @return array
+     */
+    return apply_filters('mangapress_navigation_links', $navigation_links);
+}
+
+
+/**
+ * Check if the post is the current post in comic navigation
+ *
+ * @param \WP_Post $post
+ * @param \WP_Post $current
+ * @return boolean
+ */
+function is_current_post($post, $current)
+{
+    if (!is_a($post, \WP_Post::class)) {
+        return true;
+    }
+
+    return $post->ID === $current->ID;
+}
+
+/**
+ * Get the permalink url of the comic post ($post). If $post is false, then
+ * use the current page ($current_page).
+ * @link https://developer.wordpress.org/reference/functions/get_permalink/ see \get_permalink()
+ *
+ * @param \WP_Post $post
+ * @param \WP_Post $current_page
+ * @return string|false Return the url if successful, otherwise false
+ */
+function get_comic_page_url($post, $current_page)
+{
+    if (!isset($post->ID)) {
+        return get_permalink($current_page->ID);
+    }
+
+    return get_permalink($post->ID);
 }
