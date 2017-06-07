@@ -14,8 +14,10 @@ Manga+Press is a webcomic management system for WordPress. Manga+Press uses Word
 
 
 ### TODO
- * Re-write comic navigation system
+ * Refactor project structure
  * Create visual unit tests (CSS/HTML) for comic posts, navigation, etc.
+ * Create validation functions for options
+ * Create hooks for loading plugin-specific template parts
     
     
 ### Changelog

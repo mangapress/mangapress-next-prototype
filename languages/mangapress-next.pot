@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mangapress-next 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-19 12:53-0600\n"
+"POT-Creation-Date: 2017-06-06 21:00-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,51 +17,175 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: mangapress-install.php:77
+#: mangapress-admin.php:45 mangapress-admin.php:46
+msgid "Manga+Press Options"
+msgstr ""
+
+#: mangapress-install.php:72
 msgid ""
 "This plugin requires PHP 5.3 or higher. If you're running php 5.2.x, please "
 "use Manga+Press 2.9.x."
 msgstr ""
 
-#: mangapress-install.php:163
+#: mangapress-install.php:158
 msgid ""
 "Default Series category created when plugin is activated. It is suggested "
 "that you rename this category."
 msgstr ""
 
-#: mangapress-posts.php:114 mangapress-posts.php:115
-#: includes/posts-functions.php:250
+#: mangapress-options.php:126
+msgid "Basic Options"
+msgstr ""
+
+#: mangapress-options.php:127
+msgid ""
+"This section sets the &ldquo;Latest-&rdquo; and &ldquo;Comic Archive&rdquo; "
+"pages, number of comics per page, and grouping comics together by category."
+msgstr ""
+
+#: mangapress-options.php:132
+msgid "Group Comics"
+msgstr ""
+
+#: mangapress-options.php:134
+msgid ""
+"Group comics by category. This option will ignore the parent category, and "
+"group according to the child-category."
+msgstr ""
+
+#: mangapress-options.php:141
+msgid "Use Parent Category"
+msgstr ""
+
+#: mangapress-options.php:143
+msgid ""
+"Group comics by top-most parent category. Use this option if you have sub-"
+"categories but want your navigation to function using the parent category."
+msgstr ""
+
+#: mangapress-options.php:150
+msgid "Latest Comic Page"
+msgstr ""
+
+#: mangapress-options.php:152 mangapress-options.php:163
+msgid "Select a Page"
+msgstr ""
+
+#: mangapress-options.php:161
+msgid "Comic Archive Page"
+msgstr ""
+
+#: mangapress-options.php:172
+msgid "Comic Page Options"
+msgstr ""
+
+#: mangapress-options.php:173
+msgid ""
+"Handles image sizing options for comic pages. Thumbnail support may need to "
+"be enabled for some features to work properly. If page- or thumbnail sizes "
+"are changed, then a plugin such as Regenerate Thumbnails may be used to "
+"create the new thumbnails."
+msgstr ""
+
+#: mangapress-options.php:178
+msgid "Generate Comic Page"
+msgstr ""
+
+#: mangapress-options.php:179
+msgid "Generate a comic page based on values below."
+msgstr ""
+
+#: mangapress-options.php:187
+msgid "Comic Page Width"
+msgstr ""
+
+#: mangapress-options.php:195
+msgid "Comic Page Height"
+msgstr ""
+
+#: mangapress-options.php:203
+msgid "Navigation Options"
+msgstr ""
+
+#: mangapress-options.php:204
+msgid ""
+"Options for comic navigation. Whether to have navigation automatically "
+"inserted on comic pages, or to enable/disable default comic navigation CSS."
+msgstr ""
+
+#: mangapress-options.php:208
+msgid "Navigation CSS"
+msgstr ""
+
+#: mangapress-options.php:209
+msgid ""
+"Defaults to Custom CSS. Use Default CSS if you do not wish to create a child-"
+"theme."
+msgstr ""
+
+#: mangapress-options.php:212
+msgid "Custom CSS"
+msgstr ""
+
+#: mangapress-options.php:213
+msgid "Default CSS"
+msgstr ""
+
+#: mangapress-posts.php:107 mangapress-posts.php:108
+#: includes/posts-functions.php:254
 msgid "Series"
 msgstr ""
 
-#: mangapress-posts.php:125
+#: mangapress-posts.php:118
 msgid "Comics"
 msgstr ""
 
-#: mangapress-posts.php:126
+#: mangapress-posts.php:119
 msgid "Comic"
 msgstr ""
 
-#: includes/posts-functions.php:18
+#: includes/posts-functions.php:22
 msgid "Comic Image"
 msgstr ""
 
-#: includes/posts-functions.php:183
+#: includes/posts-functions.php:187
 msgid "Upload or Choose Your Comic Image File"
 msgstr ""
 
-#: includes/posts-functions.php:184
+#: includes/posts-functions.php:188
 msgid "Insert Comic into Post"
 msgstr ""
 
-#: includes/posts-functions.php:248
+#: includes/posts-functions.php:252
 msgid "Thumbnail"
 msgstr ""
 
-#: includes/posts-functions.php:249
+#: includes/posts-functions.php:253
 msgid "Comic Title"
 msgstr ""
 
-#: includes/posts-functions.php:251
+#: includes/posts-functions.php:255
 msgid "Description"
+msgstr ""
+
+#: includes/posts-functions.php:441
+msgid "First"
+msgstr ""
+
+#: includes/posts-functions.php:446
+msgid "Previous"
+msgstr ""
+
+#: includes/posts-functions.php:451
+msgid "Next"
+msgstr ""
+
+#: includes/posts-functions.php:456
+msgid "Last"
+msgstr ""
+
+#: includes/template.php:195
+#, php-format
+msgctxt "calendar caption"
+msgid "%1$s %2$s"
 msgstr ""
