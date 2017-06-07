@@ -56,7 +56,8 @@ module.exports = function (grunt) {
                             '!Gruntfile.js',
                             '!package.json',
                             '!phpunit.xml.dist',
-                            '!phpdoc.xml'
+                            '!phpdoc.xml',
+                            '!phpunit.phar'
                         ],
                         dest: BUILD_DIR + '/<%= pkg.version %>/mangapress-next/'
                     }
@@ -113,7 +114,7 @@ module.exports = function (grunt) {
         }, this.async());
     });
 
-    grunt.registerTask('build', ['phpunit', 'update-readmes', 'pot', 'copy', 'compress']);
+    grunt.registerTask('build', ['update-readmes', 'pot', 'copy', 'compress']);
     grunt.registerTask('update-readmes', updateReadmes);
 
     grunt.loadNpmTasks('grunt-contrib-copy');
